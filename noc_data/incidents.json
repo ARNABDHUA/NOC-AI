@@ -1,0 +1,953 @@
+[
+  {
+    "incident_id": "INC-2026-001",
+    "group_id": "GRP-001",
+    "alarm_ids": [
+      "ALM-2026088",
+      "ALM-2026040",
+      "ALM-2026012"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "SW-AGG-02",
+      "PE-RTR-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-03T19:20:24Z",
+    "status": "Open",
+    "root_cause": "DDoS traffic flooding core interfaces",
+    "resolution": "Rolled back BGP policy to previous version"
+  },
+  {
+    "incident_id": "INC-2026-002",
+    "group_id": "GRP-002",
+    "alarm_ids": [
+      "ALM-2026003",
+      "ALM-2026066",
+      "ALM-2026020",
+      "ALM-2026023",
+      "ALM-2026068"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "FIREWALL-01",
+      "CE-RTR-01",
+      "RTR-CORE-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-11T12:44:24Z",
+    "status": "In Progress",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-003",
+    "group_id": "GRP-003",
+    "alarm_ids": [
+      "ALM-2026032",
+      "ALM-2026073",
+      "ALM-2026001",
+      "ALM-2026022",
+      "ALM-2026028"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "RTR-EDGE-01",
+      "FIREWALL-02",
+      "PE-RTR-02"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-01T21:21:24Z",
+    "status": "In Progress",
+    "root_cause": "Misconfigured BGP policy",
+    "resolution": "Adjusted OSPF cost; stabilised topology"
+  },
+  {
+    "incident_id": "INC-2026-004",
+    "group_id": "GRP-004",
+    "alarm_ids": [
+      "ALM-2026088",
+      "ALM-2026010",
+      "ALM-2026070"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "RTR-CORE-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-14T09:36:24Z",
+    "status": "Resolved",
+    "root_cause": "Memory leak in routing daemon",
+    "resolution": "Patched routing daemon; restarted process"
+  },
+  {
+    "incident_id": "INC-2026-005",
+    "group_id": "GRP-005",
+    "alarm_ids": [
+      "ALM-2026078",
+      "ALM-2026042"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "RTR-CORE-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-10T02:38:24Z",
+    "status": "Open",
+    "root_cause": "Memory leak in routing daemon",
+    "resolution": "Restarted BGP daemon; verified neighbor sessions"
+  },
+  {
+    "incident_id": "INC-2026-006",
+    "group_id": "GRP-006",
+    "alarm_ids": [
+      "ALM-2026087",
+      "ALM-2026013"
+    ],
+    "affected_devices": [
+      "FIREWALL-01"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-05-31T19:07:24Z",
+    "status": "Resolved",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Patched routing daemon; restarted process"
+  },
+  {
+    "incident_id": "INC-2026-007",
+    "group_id": "GRP-007",
+    "alarm_ids": [
+      "ALM-2026052",
+      "ALM-2026041",
+      "ALM-2026006"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "SW-AGG-01",
+      "RTR-CORE-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-03T13:00:24Z",
+    "status": "In Progress",
+    "root_cause": "OSPF metric change causing rerouting storm",
+    "resolution": "Restarted BGP daemon; verified neighbor sessions"
+  },
+  {
+    "incident_id": "INC-2026-008",
+    "group_id": "GRP-008",
+    "alarm_ids": [
+      "ALM-2026033",
+      "ALM-2026002",
+      "ALM-2026018"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "RTR-EDGE-02",
+      "PE-RTR-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-03T05:13:24Z",
+    "status": "Resolved",
+    "root_cause": "Misconfigured BGP policy",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-009",
+    "group_id": "GRP-009",
+    "alarm_ids": [
+      "ALM-2026047",
+      "ALM-2026098"
+    ],
+    "affected_devices": [
+      "SW-AGG-01",
+      "FIREWALL-01"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-12T16:32:24Z",
+    "status": "Resolved",
+    "root_cause": "Memory leak in routing daemon",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-010",
+    "group_id": "GRP-010",
+    "alarm_ids": [
+      "ALM-2026067",
+      "ALM-2026023",
+      "ALM-2026060"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "SW-AGG-01"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-05-31T19:44:24Z",
+    "status": "Open",
+    "root_cause": "Memory leak in routing daemon",
+    "resolution": "Adjusted OSPF cost; stabilised topology"
+  },
+  {
+    "incident_id": "INC-2026-011",
+    "group_id": "GRP-011",
+    "alarm_ids": [
+      "ALM-2026096",
+      "ALM-2026078",
+      "ALM-2026051",
+      "ALM-2026079"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "SW-AGG-01",
+      "RTR-CORE-02",
+      "PE-RTR-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-11T07:17:24Z",
+    "status": "In Progress",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-012",
+    "group_id": "GRP-012",
+    "alarm_ids": [
+      "ALM-2026026",
+      "ALM-2026080",
+      "ALM-2026087"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "FIREWALL-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-01T11:13:24Z",
+    "status": "Resolved",
+    "root_cause": "OSPF metric change causing rerouting storm",
+    "resolution": "Patched routing daemon; restarted process"
+  },
+  {
+    "incident_id": "INC-2026-013",
+    "group_id": "GRP-013",
+    "alarm_ids": [
+      "ALM-2026076",
+      "ALM-2026015",
+      "ALM-2026039",
+      "ALM-2026007",
+      "ALM-2026040"
+    ],
+    "affected_devices": [
+      "PE-RTR-01",
+      "PE-RTR-02",
+      "RTR-EDGE-01",
+      "CE-RTR-01",
+      "FIREWALL-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-09T00:14:24Z",
+    "status": "Resolved",
+    "root_cause": "Fiber cut causing cascading link failures",
+    "resolution": "Restarted BGP daemon; verified neighbor sessions"
+  },
+  {
+    "incident_id": "INC-2026-014",
+    "group_id": "GRP-014",
+    "alarm_ids": [
+      "ALM-2026093",
+      "ALM-2026040",
+      "ALM-2026077"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "RTR-EDGE-02",
+      "PE-RTR-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-11T11:29:24Z",
+    "status": "Open",
+    "root_cause": "BGP session reset due to memory pressure",
+    "resolution": "Rolled back BGP policy to previous version"
+  },
+  {
+    "incident_id": "INC-2026-015",
+    "group_id": "GRP-015",
+    "alarm_ids": [
+      "ALM-2026049",
+      "ALM-2026075"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-05T19:52:24Z",
+    "status": "Open",
+    "root_cause": "BGP session reset due to memory pressure",
+    "resolution": "Adjusted OSPF cost; stabilised topology"
+  },
+  {
+    "incident_id": "INC-2026-016",
+    "group_id": "GRP-016",
+    "alarm_ids": [
+      "ALM-2026074",
+      "ALM-2026084",
+      "ALM-2026058"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "FIREWALL-01"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-13T11:20:24Z",
+    "status": "Resolved",
+    "root_cause": "BGP session reset due to memory pressure",
+    "resolution": "Rolled back BGP policy to previous version"
+  },
+  {
+    "incident_id": "INC-2026-017",
+    "group_id": "GRP-017",
+    "alarm_ids": [
+      "ALM-2026009",
+      "ALM-2026083"
+    ],
+    "affected_devices": [
+      "RTR-CORE-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-01T13:44:24Z",
+    "status": "In Progress",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Rerouted traffic via backup fiber path"
+  },
+  {
+    "incident_id": "INC-2026-018",
+    "group_id": "GRP-018",
+    "alarm_ids": [
+      "ALM-2026090",
+      "ALM-2026052",
+      "ALM-2026046",
+      "ALM-2026024",
+      "ALM-2026019"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "RTR-CORE-01",
+      "PE-RTR-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-01T12:23:24Z",
+    "status": "Resolved",
+    "root_cause": "OSPF metric change causing rerouting storm",
+    "resolution": "Rerouted traffic via backup fiber path"
+  },
+  {
+    "incident_id": "INC-2026-019",
+    "group_id": "GRP-019",
+    "alarm_ids": [
+      "ALM-2026023",
+      "ALM-2026046",
+      "ALM-2026045"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "SW-AGG-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-08T17:03:24Z",
+    "status": "In Progress",
+    "root_cause": "Fiber cut causing cascading link failures",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-020",
+    "group_id": "GRP-020",
+    "alarm_ids": [
+      "ALM-2026028",
+      "ALM-2026024",
+      "ALM-2026065",
+      "ALM-2026008"
+    ],
+    "affected_devices": [
+      "FIREWALL-02",
+      "CE-RTR-01",
+      "RTR-CORE-02",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-15T03:10:24Z",
+    "status": "Resolved",
+    "root_cause": "DDoS traffic flooding core interfaces",
+    "resolution": "Rerouted traffic via backup fiber path"
+  },
+  {
+    "incident_id": "INC-2026-021",
+    "group_id": "GRP-021",
+    "alarm_ids": [
+      "ALM-2026094",
+      "ALM-2026043",
+      "ALM-2026076",
+      "ALM-2026089",
+      "ALM-2026034"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "SW-AGG-01",
+      "RTR-CORE-01",
+      "LB-01"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-09T11:42:24Z",
+    "status": "Resolved",
+    "root_cause": "Misconfigured BGP policy",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-022",
+    "group_id": "GRP-022",
+    "alarm_ids": [
+      "ALM-2026058",
+      "ALM-2026041"
+    ],
+    "affected_devices": [
+      "SW-AGG-01",
+      "FIREWALL-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-15T10:46:24Z",
+    "status": "In Progress",
+    "root_cause": "Fiber cut causing cascading link failures",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-023",
+    "group_id": "GRP-023",
+    "alarm_ids": [
+      "ALM-2026086",
+      "ALM-2026023",
+      "ALM-2026060",
+      "ALM-2026020",
+      "ALM-2026036"
+    ],
+    "affected_devices": [
+      "RTR-CORE-02",
+      "SW-AGG-01",
+      "CE-RTR-01",
+      "RTR-EDGE-01",
+      "FIREWALL-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-09T08:14:24Z",
+    "status": "In Progress",
+    "root_cause": "Misconfigured BGP policy",
+    "resolution": "Rerouted traffic via backup fiber path"
+  },
+  {
+    "incident_id": "INC-2026-024",
+    "group_id": "GRP-024",
+    "alarm_ids": [
+      "ALM-2026001",
+      "ALM-2026054"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "FIREWALL-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-02T20:46:24Z",
+    "status": "In Progress",
+    "root_cause": "Memory leak in routing daemon",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-025",
+    "group_id": "GRP-025",
+    "alarm_ids": [
+      "ALM-2026055",
+      "ALM-2026022",
+      "ALM-2026074"
+    ],
+    "affected_devices": [
+      "FIREWALL-02",
+      "FIREWALL-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-14T15:21:24Z",
+    "status": "Resolved",
+    "root_cause": "OSPF metric change causing rerouting storm",
+    "resolution": "Rolled back BGP policy to previous version"
+  },
+  {
+    "incident_id": "INC-2026-026",
+    "group_id": "GRP-026",
+    "alarm_ids": [
+      "ALM-2026081",
+      "ALM-2026042"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "RTR-CORE-01"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-02T20:29:24Z",
+    "status": "Open",
+    "root_cause": "Memory leak in routing daemon",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-027",
+    "group_id": "GRP-027",
+    "alarm_ids": [
+      "ALM-2026025",
+      "ALM-2026002",
+      "ALM-2026056"
+    ],
+    "affected_devices": [
+      "SW-AGG-02",
+      "RTR-CORE-02",
+      "PE-RTR-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-12T07:24:24Z",
+    "status": "In Progress",
+    "root_cause": "CPU spike from routing loop",
+    "resolution": "Adjusted OSPF cost; stabilised topology"
+  },
+  {
+    "incident_id": "INC-2026-028",
+    "group_id": "GRP-028",
+    "alarm_ids": [
+      "ALM-2026071",
+      "ALM-2026028"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "FIREWALL-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-01T11:28:24Z",
+    "status": "Open",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-029",
+    "group_id": "GRP-029",
+    "alarm_ids": [
+      "ALM-2026053",
+      "ALM-2026014"
+    ],
+    "affected_devices": [
+      "RTR-CORE-01",
+      "PE-RTR-02"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-01T12:44:24Z",
+    "status": "In Progress",
+    "root_cause": "BGP session reset due to memory pressure",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-030",
+    "group_id": "GRP-030",
+    "alarm_ids": [
+      "ALM-2026094",
+      "ALM-2026084",
+      "ALM-2026063"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "SW-AGG-01",
+      "LB-01"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-09T15:46:24Z",
+    "status": "Open",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Rerouted traffic via backup fiber path"
+  },
+  {
+    "incident_id": "INC-2026-031",
+    "group_id": "GRP-031",
+    "alarm_ids": [
+      "ALM-2026004",
+      "ALM-2026092",
+      "ALM-2026032",
+      "ALM-2026015",
+      "ALM-2026057"
+    ],
+    "affected_devices": [
+      "FIREWALL-02",
+      "SW-AGG-01",
+      "CE-RTR-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-09T10:12:24Z",
+    "status": "Resolved",
+    "root_cause": "BGP session reset due to memory pressure",
+    "resolution": "Applied ACL to drop DDoS traffic at edge"
+  },
+  {
+    "incident_id": "INC-2026-032",
+    "group_id": "GRP-032",
+    "alarm_ids": [
+      "ALM-2026052",
+      "ALM-2026046",
+      "ALM-2026073"
+    ],
+    "affected_devices": [
+      "RTR-CORE-01",
+      "RTR-EDGE-02",
+      "PE-RTR-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-03T17:59:24Z",
+    "status": "Open",
+    "root_cause": "BGP session reset due to memory pressure",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-033",
+    "group_id": "GRP-033",
+    "alarm_ids": [
+      "ALM-2026091",
+      "ALM-2026032",
+      "ALM-2026049",
+      "ALM-2026083",
+      "ALM-2026098"
+    ],
+    "affected_devices": [
+      "SW-AGG-02",
+      "SW-AGG-01",
+      "CE-RTR-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-03T14:29:24Z",
+    "status": "Open",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-034",
+    "group_id": "GRP-034",
+    "alarm_ids": [
+      "ALM-2026098",
+      "ALM-2026081",
+      "ALM-2026022"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "SW-AGG-01",
+      "FIREWALL-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-01T15:49:24Z",
+    "status": "Open",
+    "root_cause": "Misconfigured BGP policy",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-035",
+    "group_id": "GRP-035",
+    "alarm_ids": [
+      "ALM-2026086",
+      "ALM-2026022"
+    ],
+    "affected_devices": [
+      "FIREWALL-02",
+      "FIREWALL-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-06T23:47:24Z",
+    "status": "Resolved",
+    "root_cause": "DDoS traffic flooding core interfaces",
+    "resolution": "Rolled back BGP policy to previous version"
+  },
+  {
+    "incident_id": "INC-2026-036",
+    "group_id": "GRP-036",
+    "alarm_ids": [
+      "ALM-2026023",
+      "ALM-2026075",
+      "ALM-2026056",
+      "ALM-2026078"
+    ],
+    "affected_devices": [
+      "CE-RTR-01",
+      "RTR-CORE-02",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-03T21:05:24Z",
+    "status": "Open",
+    "root_cause": "OSPF metric change causing rerouting storm",
+    "resolution": "Rolled back BGP policy to previous version"
+  },
+  {
+    "incident_id": "INC-2026-037",
+    "group_id": "GRP-037",
+    "alarm_ids": [
+      "ALM-2026077",
+      "ALM-2026041"
+    ],
+    "affected_devices": [
+      "SW-AGG-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-11T16:32:24Z",
+    "status": "Resolved",
+    "root_cause": "CPU spike from routing loop",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-038",
+    "group_id": "GRP-038",
+    "alarm_ids": [
+      "ALM-2026027",
+      "ALM-2026092"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "FIREWALL-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-13T22:28:24Z",
+    "status": "Open",
+    "root_cause": "Fiber cut causing cascading link failures",
+    "resolution": "Adjusted OSPF cost; stabilised topology"
+  },
+  {
+    "incident_id": "INC-2026-039",
+    "group_id": "GRP-039",
+    "alarm_ids": [
+      "ALM-2026009",
+      "ALM-2026046",
+      "ALM-2026082",
+      "ALM-2026013"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "FIREWALL-01",
+      "RTR-CORE-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-01T16:50:24Z",
+    "status": "Open",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Rerouted traffic via backup fiber path"
+  },
+  {
+    "incident_id": "INC-2026-040",
+    "group_id": "GRP-040",
+    "alarm_ids": [
+      "ALM-2026026",
+      "ALM-2026087"
+    ],
+    "affected_devices": [
+      "FIREWALL-01",
+      "RTR-EDGE-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-07T06:31:24Z",
+    "status": "Open",
+    "root_cause": "OSPF metric change causing rerouting storm",
+    "resolution": "Restarted BGP daemon; verified neighbor sessions"
+  },
+  {
+    "incident_id": "INC-2026-041",
+    "group_id": "GRP-041",
+    "alarm_ids": [
+      "ALM-2026045",
+      "ALM-2026082",
+      "ALM-2026054"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "SW-AGG-01",
+      "FIREWALL-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-01T06:42:24Z",
+    "status": "Resolved",
+    "root_cause": "Fiber cut causing cascading link failures",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-042",
+    "group_id": "GRP-042",
+    "alarm_ids": [
+      "ALM-2026097",
+      "ALM-2026033",
+      "ALM-2026011"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "RTR-EDGE-01",
+      "FIREWALL-01"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-09T05:38:24Z",
+    "status": "Open",
+    "root_cause": "Misconfigured BGP policy",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-043",
+    "group_id": "GRP-043",
+    "alarm_ids": [
+      "ALM-2026006",
+      "ALM-2026037",
+      "ALM-2026053",
+      "ALM-2026017"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01",
+      "RTR-CORE-01",
+      "RTR-CORE-02"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-05T06:02:24Z",
+    "status": "Open",
+    "root_cause": "Fiber cut causing cascading link failures",
+    "resolution": "Cleared routing table cache; applied rate-limit"
+  },
+  {
+    "incident_id": "INC-2026-044",
+    "group_id": "GRP-044",
+    "alarm_ids": [
+      "ALM-2026095",
+      "ALM-2026054"
+    ],
+    "affected_devices": [
+      "SW-AGG-02",
+      "FIREWALL-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-06T03:37:24Z",
+    "status": "Open",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Applied ACL to drop DDoS traffic at edge"
+  },
+  {
+    "incident_id": "INC-2026-045",
+    "group_id": "GRP-045",
+    "alarm_ids": [
+      "ALM-2026082",
+      "ALM-2026041",
+      "ALM-2026057",
+      "ALM-2026051",
+      "ALM-2026010"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "SW-AGG-01",
+      "RTR-CORE-02",
+      "RTR-CORE-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-07T03:38:24Z",
+    "status": "Open",
+    "root_cause": "Memory leak in routing daemon",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-046",
+    "group_id": "GRP-046",
+    "alarm_ids": [
+      "ALM-2026084",
+      "ALM-2026037"
+    ],
+    "affected_devices": [
+      "LB-01",
+      "RTR-CORE-02"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-10T11:46:24Z",
+    "status": "In Progress",
+    "root_cause": "CPU spike from routing loop",
+    "resolution": "Replaced faulty SFP module on interface"
+  },
+  {
+    "incident_id": "INC-2026-047",
+    "group_id": "GRP-047",
+    "alarm_ids": [
+      "ALM-2026039",
+      "ALM-2026029",
+      "ALM-2026019",
+      "ALM-2026060",
+      "ALM-2026096"
+    ],
+    "affected_devices": [
+      "RTR-CORE-02",
+      "RTR-EDGE-01",
+      "SW-AGG-01",
+      "PE-RTR-01"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-03T01:18:24Z",
+    "status": "Resolved",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Restarted BGP daemon; verified neighbor sessions"
+  },
+  {
+    "incident_id": "INC-2026-048",
+    "group_id": "GRP-048",
+    "alarm_ids": [
+      "ALM-2026006",
+      "ALM-2026072"
+    ],
+    "affected_devices": [
+      "RTR-EDGE-01"
+    ],
+    "severity": "Major",
+    "timestamp": "2026-06-11T07:46:24Z",
+    "status": "In Progress",
+    "root_cause": "Misconfigured BGP policy",
+    "resolution": "Rolled back BGP policy to previous version"
+  },
+  {
+    "incident_id": "INC-2026-049",
+    "group_id": "GRP-049",
+    "alarm_ids": [
+      "ALM-2026042",
+      "ALM-2026076",
+      "ALM-2026055",
+      "ALM-2026036",
+      "ALM-2026098"
+    ],
+    "affected_devices": [
+      "RTR-CORE-02",
+      "FIREWALL-02",
+      "SW-AGG-01",
+      "RTR-EDGE-01",
+      "RTR-CORE-01"
+    ],
+    "severity": "Minor",
+    "timestamp": "2026-06-05T23:11:24Z",
+    "status": "Resolved",
+    "root_cause": "OSPF metric change causing rerouting storm",
+    "resolution": "Applied ACL to drop DDoS traffic at edge"
+  },
+  {
+    "incident_id": "INC-2026-050",
+    "group_id": "GRP-050",
+    "alarm_ids": [
+      "ALM-2026043",
+      "ALM-2026069"
+    ],
+    "affected_devices": [
+      "RTR-CORE-01",
+      "PE-RTR-02"
+    ],
+    "severity": "Critical",
+    "timestamp": "2026-06-01T06:53:24Z",
+    "status": "In Progress",
+    "root_cause": "Interface flapping due to hardware fault",
+    "resolution": "Applied ACL to drop DDoS traffic at edge"
+  }
+]

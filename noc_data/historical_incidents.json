@@ -1,0 +1,72 @@
+[
+  {
+    "incident": "BGP Neighbor Down",
+    "root_cause": "Memory Leak in BGP process",
+    "resolution": "Restart BGP Daemon; apply vendor patch",
+    "device": "RTR-CORE-01",
+    "severity": "Critical"
+  },
+  {
+    "incident": "Packet Loss > 5%",
+    "root_cause": "Interface Queue Congestion",
+    "resolution": "Clear interface queue; apply QoS policy",
+    "device": "RTR-EDGE-01",
+    "severity": "Major"
+  },
+  {
+    "incident": "Core Router Failure",
+    "root_cause": "Hardware PSU failure",
+    "resolution": "Replace PSU; failover to secondary router",
+    "device": "RTR-CORE-02",
+    "severity": "Critical"
+  },
+  {
+    "incident": "OSPF Adjacency Failure",
+    "root_cause": "MTU mismatch on peer link",
+    "resolution": "Set MTU to 9000 on both sides",
+    "device": "SW-AGG-01",
+    "severity": "Major"
+  },
+  {
+    "incident": "High CPU Utilization",
+    "root_cause": "Routing loop due to misconfigured BGP policy",
+    "resolution": "Remove incorrect route-map; clear BGP",
+    "device": "PE-RTR-01",
+    "severity": "Major"
+  },
+  {
+    "incident": "Fiber Cut",
+    "root_cause": "Physical fiber damage in underground duct",
+    "resolution": "Rerouted via backup path; dispatched repair crew",
+    "device": "RTR-EDGE-02",
+    "severity": "Critical"
+  },
+  {
+    "incident": "Interface Flapping",
+    "root_cause": "Faulty SFP transceiver",
+    "resolution": "Replace SFP module; test with BERT",
+    "device": "CE-RTR-01",
+    "severity": "Major"
+  },
+  {
+    "incident": "Memory Leak",
+    "root_cause": "Routing daemon software bug",
+    "resolution": "Upgrade to patched version; monitor for 24h",
+    "device": "FIREWALL-01",
+    "severity": "Critical"
+  },
+  {
+    "incident": "BGP Route Table Overflow",
+    "root_cause": "Full internet table accepted from transit peer",
+    "resolution": "Apply max-prefix limit; filter bogons",
+    "device": "PE-RTR-02",
+    "severity": "Critical"
+  },
+  {
+    "incident": "MPLS Label Stack Error",
+    "root_cause": "P-router misconfiguration after maintenance",
+    "resolution": "Restore MPLS config from backup; verify LSPs",
+    "device": "RTR-CORE-01",
+    "severity": "Major"
+  }
+]

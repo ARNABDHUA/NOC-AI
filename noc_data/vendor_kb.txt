@@ -1,0 +1,24 @@
+KB-001: Cisco IOS-XR BGP Memory Issue (CSCab12345)
+Platform: Cisco ASR 9000 | IOS-XR 7.x
+Issue: BGP process leaks memory when processing large route tables (>700k routes).
+Fix: Upgrade to IOS-XR 7.5.2 or later. Workaround: restart bgp process every 24h.
+
+KB-002: Juniper OSPF Adjacency Flap (PR1234567)
+Platform: Juniper MX Series | JunOS 21.x
+Issue: OSPF adjacency drops under heavy traffic due to hello timer drift.
+Fix: Apply JunOS patch PR1234567. Workaround: increase dead interval to 40s.
+
+KB-003: Nokia SR-OS Interface Error
+Platform: Nokia 7750 SR | SR-OS 22.x
+Issue: 100G interface reports CRC errors under sustained high traffic.
+Fix: Replace QSFP28 module. Ensure firmware version >= 3.12.
+
+KB-004: Huawei VRP Routing Table Overflow
+Platform: Huawei NE40E | VRP V800R011
+Issue: Route table exceeds 2M entries causing process crash.
+Fix: Tune BGP route policy to filter unwanted prefixes. Upgrade to V800R021.
+
+KB-005: Arista EOS MLAG Split-Brain
+Platform: Arista 7050X | EOS 4.27
+Issue: MLAG peer-link flap causes split-brain; dual active state.
+Fix: Apply EOS 4.27.3F bugfix. Configure rapid recovery timers.

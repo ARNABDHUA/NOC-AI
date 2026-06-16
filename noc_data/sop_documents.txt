@@ -1,0 +1,51 @@
+SOP-001: BGP Neighbor Down
+Symptoms: BGP session drops, routing table gaps, traffic blackholing.
+Steps:
+  1. Verify physical connectivity: ping neighbor IP, check interface status.
+  2. Review BGP logs: journalctl -u bgpd | tail -100
+  3. Check CPU & memory: show processes | include bgpd
+  4. Clear BGP session: clear ip bgp <neighbor> soft
+  5. If CPU>90%: restart routing daemon: systemctl restart bgpd
+  6. Verify peers re-establish: show ip bgp summary
+  7. Escalate to Tier-3 if not resolved in 15 minutes.
+
+SOP-002: High CPU on Core Router
+Symptoms: CPU utilization >90%, packet drops, sluggish response.
+Steps:
+  1. Identify top processes: show processes cpu sorted
+  2. Check for routing loops: show ip route summary
+  3. Apply CPU rate-limiting: router cpu-threshold 80
+  4. Restart offending process if safe.
+  5. Engage vendor TAC if hardware fault suspected.
+
+SOP-003: Interface Flapping
+Symptoms: Interface up/down cycles, log storms, instability.
+Steps:
+  1. Check physical layer: inspect SFP, fiber connectors, cables.
+  2. Review error counters: show interface <intf> counters error
+  3. Enable dampening: interface dampening half-life 5 reuse 1000 suppress 2000 max-suppress 20
+  4. Replace faulty hardware if errors persist.
+
+SOP-004: Fiber Cut / Link Down
+Symptoms: Multiple link alarms, traffic rerouting, SLA breach risk.
+Steps:
+  1. Confirm cut via optical loss readings (OTDR).
+  2. Activate backup path: ip route <prefix> <backup-next-hop>
+  3. Notify NOC Bridge; engage field crew for physical repair.
+  4. Monitor traffic switch-over via NetFlow.
+
+SOP-005: Memory Leak
+Symptoms: Memory utilization climbing, process restart logs.
+Steps:
+  1. Identify leaking process: show processes memory sorted
+  2. Restart process in maintenance window if allowed.
+  3. Apply vendor patch if available.
+  4. Schedule hardware memory upgrade if recurrent.
+
+SOP-006: Packet Loss > 5%
+Symptoms: Customer complaints, QoS alerts, latency spikes.
+Steps:
+  1. Run traceroute to isolate loss point.
+  2. Check interface error counters and queue drops.
+  3. Apply traffic shaping or QoS policy adjustment.
+  4. Escalate to backbone team if transit provider involved.

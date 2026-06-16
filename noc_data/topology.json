@@ -1,0 +1,133 @@
+{
+  "nodes": [
+    {
+      "id": "RTR-CORE-01",
+      "type": "Core Router",
+      "region": "DC-North"
+    },
+    {
+      "id": "RTR-CORE-02",
+      "type": "Core Router",
+      "region": "DC-South"
+    },
+    {
+      "id": "RTR-EDGE-01",
+      "type": "Edge Router",
+      "region": "POP-East"
+    },
+    {
+      "id": "RTR-EDGE-02",
+      "type": "Edge Router",
+      "region": "POP-West"
+    },
+    {
+      "id": "SW-AGG-01",
+      "type": "Aggregation Switch",
+      "region": "DC-North"
+    },
+    {
+      "id": "SW-AGG-02",
+      "type": "Aggregation Switch",
+      "region": "DC-South"
+    },
+    {
+      "id": "PE-RTR-01",
+      "type": "PE Router",
+      "region": "POP-East"
+    },
+    {
+      "id": "PE-RTR-02",
+      "type": "PE Router",
+      "region": "POP-West"
+    },
+    {
+      "id": "CE-RTR-01",
+      "type": "CE Router",
+      "region": "Customer-Site"
+    },
+    {
+      "id": "FIREWALL-01",
+      "type": "Firewall",
+      "region": "DC-North"
+    },
+    {
+      "id": "LB-01",
+      "type": "Load Balancer",
+      "region": "DC-North"
+    }
+  ],
+  "links": [
+    {
+      "source": "RTR-CORE-01",
+      "target": "RTR-CORE-02",
+      "type": "Core",
+      "bandwidth": "100G"
+    },
+    {
+      "source": "RTR-CORE-01",
+      "target": "RTR-EDGE-01",
+      "type": "Transit",
+      "bandwidth": "40G"
+    },
+    {
+      "source": "RTR-CORE-01",
+      "target": "RTR-EDGE-02",
+      "type": "Transit",
+      "bandwidth": "40G"
+    },
+    {
+      "source": "RTR-CORE-02",
+      "target": "RTR-EDGE-01",
+      "type": "Transit",
+      "bandwidth": "40G"
+    },
+    {
+      "source": "RTR-CORE-02",
+      "target": "RTR-EDGE-02",
+      "type": "Transit",
+      "bandwidth": "40G"
+    },
+    {
+      "source": "RTR-CORE-01",
+      "target": "SW-AGG-01",
+      "type": "Access",
+      "bandwidth": "10G"
+    },
+    {
+      "source": "RTR-CORE-02",
+      "target": "SW-AGG-02",
+      "type": "Access",
+      "bandwidth": "10G"
+    },
+    {
+      "source": "RTR-EDGE-01",
+      "target": "PE-RTR-01",
+      "type": "MPLS",
+      "bandwidth": "10G"
+    },
+    {
+      "source": "RTR-EDGE-02",
+      "target": "PE-RTR-02",
+      "type": "MPLS",
+      "bandwidth": "10G"
+    },
+    {
+      "source": "PE-RTR-01",
+      "target": "CE-RTR-01",
+      "type": "Customer",
+      "bandwidth": "1G"
+    },
+    {
+      "source": "SW-AGG-01",
+      "target": "FIREWALL-01",
+      "type": "Security",
+      "bandwidth": "10G"
+    },
+    {
+      "source": "FIREWALL-01",
+      "target": "LB-01",
+      "type": "DMZ",
+      "bandwidth": "10G"
+    }
+  ]
+}

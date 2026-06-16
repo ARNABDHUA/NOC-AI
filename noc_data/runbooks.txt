@@ -1,0 +1,32 @@
+RUNBOOK-001: BGP Recovery Procedure
+Trigger: BGP Neighbor Down alarm (Critical)
+Owner: NOC Tier-2
+SLA: Restore within 15 minutes
+Steps:
+  1. [Auto] Ping neighbor - expect response
+  2. [Auto] POST /bgp/reset {neighbor: <ip>}
+  3. [Manual] Verify BGP summary shows Established
+  4. [Auto] POST /ticket/create {priority: P1}
+  5. [Manual] Confirm with customer if traffic restored
+
+RUNBOOK-002: Core Router Failover
+Trigger: Core Router Failure alarm (Critical)
+Owner: NOC Tier-3
+SLA: Restore within 30 minutes
+Steps:
+  1. [Auto] Verify standby router readiness
+  2. [Manual] Execute failover: router hsrp preempt
+  3. [Auto] POST /interface/up {device: backup}
+  4. [Auto] Notify customer via NMS
+  5. [Manual] Root cause analysis within 2 hours
+
+RUNBOOK-003: DDoS Mitigation
+Trigger: Packet Loss > 5% + Traffic spike on edge
+Owner: Security NOC
+SLA: Mitigate within 10 minutes
+Steps:
+  1. [Auto] Identify attack vector via flow analysis
+  2. [Auto] Apply edge ACL: POST /acl/block {src: <ip>}
+  3. [Manual] Activate scrubbing center
+  4. [Auto] Monitor drop in attack traffic
+  5. [Manual] Post-incident report within 4 hours
