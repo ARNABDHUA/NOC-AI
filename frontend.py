@@ -3,6 +3,11 @@ NOC Agentic Copilot - Frontend
 Streamlit multi-page application
 Run: streamlit run frontend.py
 Requires backend running at http://localhost:8000
+
+FIX 4: Manual alarm now appears in Real-Time Alarms list immediately after submission.
+        - Page auto-redirects to Alarms after submit
+        - Newly added alarm is highlighted in green at the top
+        - Refresh button forces re-fetch from backend
 """
 
 import streamlit as st
@@ -57,6 +62,7 @@ st.markdown("""
     border-bottom:1px solid var(--border);text-align:left}
   .noc-table td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text)}
   .noc-table tr:hover td{background:var(--bg-card2)}
+  .noc-table tr.new-alarm td{background:#002a1a;border-left:3px solid var(--accent3)}
   /* severity badges */
   .badge{display:inline-block;border-radius:4px;padding:2px 10px;font-size:.72rem;font-weight:700}
   .badge-Critical{background:#3B0000;color:var(--sev-crit);border:1px solid var(--sev-crit)}
@@ -65,6 +71,9 @@ st.markdown("""
   .badge-Resolved{background:#003D1A;color:var(--accent3);border:1px solid var(--accent3)}
   .badge-Open{background:#3B0000;color:var(--sev-crit);border:1px solid var(--sev-crit)}
   .badge-InProgress{background:#2D1500;color:var(--sev-maj);border:1px solid var(--sev-maj)}
+  /* new alarm banner */
+  .new-alarm-banner{background:#002a1a;border:1px solid var(--accent3);border-radius:8px;
+    padding:12px 18px;margin-bottom:16px;font-size:.85rem;color:var(--accent3)}
   /* agent cards */
   .agent-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;
     padding:16px 20px;margin-bottom:14px}
@@ -186,7 +195,6 @@ with st.sidebar:
 
     st.markdown("<hr style='border-color:#1F2D45;margin:16px 0'>", unsafe_allow_html=True)
 
-    # Quick health check
     health = api("get", "/health")
     if health:
         st.markdown(f"""<div style='font-size:.72rem;color:#00C853'>
@@ -206,7 +214,6 @@ if st.session_state.page == "dashboard":
     data = api("get","/alarms",params={"limit":200})
     alarms = data["alarms"] if data else []
 
-    # KPI row
     sev_counts = {"Critical":0,"Major":0,"Minor":0,"Warning":0}
     for a in alarms:
         s = a.get("severity","")
@@ -228,7 +235,6 @@ if st.session_state.page == "dashboard":
 
     st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
 
-    # Charts row
     c1, c2 = st.columns(2)
     with c1:
         st.markdown("**Alarm Severity Distribution**")
@@ -243,12 +249,14 @@ if st.session_state.page == "dashboard":
         if not df_top.empty:
             st.bar_chart(df_top.set_index("Alarm"), color="#7C3AED")
 
-    # Recent alarms table
     st.markdown("**Recent Critical Alarms**")
     crit = [a for a in alarms if a.get("severity")=="Critical"][:10]
     rows = ""
     for a in crit:
-        rows += (f"<tr><td>{a['alarm_id']}</td><td>{a['device']}</td>"
+        is_new = a.get("source") == "manual"
+        row_cls = ' class="new-alarm"' if is_new else ""
+        new_tag = ' 🆕' if is_new else ""
+        rows += (f"<tr{row_cls}><td>{a['alarm_id']}{new_tag}</td><td>{a['device']}</td>"
                  f"<td>{badge(a['severity'])}</td><td>{a['alarm']}</td>"
                  f"<td>{badge(a.get('status','Open'))}</td>"
                  f"<td>{ts_fmt(a['timestamp'])}</td></tr>")
@@ -262,6 +270,19 @@ if st.session_state.page == "dashboard":
 # ══════════════════════════════════════════════════════════════════════════════
 elif st.session_state.page == "alarms":
     render_header("🔔","Real-Time Alarm Dashboard","Live alarm feed with severity classification")
+
+    # ── FIX 4: Show banner if a new alarm was just submitted ─────────────────
+    last_result = st.session_state.get("last_result")
+    if last_result and st.session_state.get("just_submitted"):
+        alarm_id   = last_result.get("alarm_id","—")
+        alarm_name = last_result.get("normalized_alarm",{}).get("normalized_alarm","")
+        ticket_id  = last_result.get("ticket",{}).get("ticket_id","—")
+        st.markdown(f"""<div class="new-alarm-banner">
+          🆕 <b>New alarm submitted successfully!</b><br>
+          Alarm ID: <b>{alarm_id}</b> | {alarm_name} | Ticket: <b>{ticket_id}</b><br>
+          <span style="font-size:.75rem;color:#6B7280">It appears at the top of the list below.</span>
+        </div>""", unsafe_allow_html=True)
+        st.session_state["just_submitted"] = False   # clear banner after showing once
 
     c1,c2,c3 = st.columns([2,2,1])
     with c1:
@@ -296,7 +317,6 @@ elif st.session_state.page == "alarms":
               <div class="metric-label">{lbl}</div>
             </div>""", unsafe_allow_html=True)
 
-    # Chart
     if alarms:
         df = pd.DataFrame(alarms)
         df["ts"] = pd.to_datetime(df["timestamp"], errors="coerce")
@@ -306,11 +326,17 @@ elif st.session_state.page == "alarms":
         st.markdown("**Alarm Timeline**")
         st.line_chart(df.set_index("ts")["sev_num"], color="#00E5FF")
 
-    # Table
+    # ── Table: highlight manually submitted alarms ────────────────────────────
+    latest_alarm_id = last_result.get("alarm_id","") if last_result else ""
     rows = ""
     for a in alarms:
-        kpi  = a.get("kpi",{})
-        rows += (f"<tr><td>{a['alarm_id']}</td><td>{a['device']}</td>"
+        kpi     = a.get("kpi",{})
+        is_new  = a.get("source") == "manual" or a.get("alarm_id") == latest_alarm_id
+        row_cls = ' class="new-alarm"' if is_new else ""
+        new_tag = ' 🆕' if is_new else ""
+        rows += (f"<tr{row_cls}>"
+                 f"<td style='font-weight:700'>{a['alarm_id']}{new_tag}</td>"
+                 f"<td>{a['device']}</td>"
                  f"<td>{badge(a['severity'])}</td>"
                  f"<td style='max-width:180px'>{a['alarm']}</td>"
                  f"<td>{badge(a.get('status','Open'))}</td>"
@@ -322,6 +348,9 @@ elif st.session_state.page == "alarms":
       <th>ID</th><th>Device</th><th>Severity</th><th>Alarm</th><th>Status</th>
       <th>CPU</th><th>Mem</th><th>Loss</th><th>Time</th>
     </tr></thead><tbody>{rows}</tbody></table>""", unsafe_allow_html=True)
+
+    st.markdown(f"<div style='font-size:.72rem;color:#6B7280;margin-top:8px'>Total alarms in store: {data.get('total',0) if data else 0} | 🆕 = manually submitted</div>",
+                unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -362,11 +391,25 @@ elif st.session_state.page == "manual":
             }
             with st.spinner("Running all 8 agents via LangGraph…"):
                 result = api("post","/alarm",json=payload)
+
             if result:
-                st.success(f"✅ Alarm processed! Ticket: **{result.get('ticket',{}).get('ticket_id','—')}**")
-                st.session_state["last_result"] = result
-                with st.expander("📋 Full Pipeline Result"):
+                # ── FIX 4: Store result, set redirect flags, navigate to alarms ──
+                st.session_state["last_result"]    = result
+                st.session_state["just_submitted"] = True   # trigger banner on alarms page
+                st.success(
+                    f"✅ Alarm **{result.get('alarm_id','—')}** processed! "
+                    f"Ticket: **{result.get('ticket',{}).get('ticket_id','—')}** | "
+                    f"Redirecting to Alarms page…"
+                )
+
+                with st.expander("📋 Full Pipeline Result (expand to review before redirect)"):
                     st.json(result)
+
+                # Auto-redirect after short display
+                import time
+                time.sleep(1)
+                st.session_state.page = "alarms"
+                st.rerun()
 
     with tab2:
         st.markdown("**Manually Inject KPI Metrics**")
@@ -464,7 +507,6 @@ elif st.session_state.page == "rca":
             st.markdown("**Correlation Data**")
             st.json(corr)
 
-    # Historical incidents table
     st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
     st.markdown("**Historical Incident RCA Database**")
     data = api("get","/incidents",params={"limit":30})
@@ -504,7 +546,6 @@ elif st.session_state.page == "knowledge":
                     st.markdown(f"""<div class="agent-body">{r['content']}</div>
                     {conf_bar(score_pct)}""", unsafe_allow_html=True)
 
-    # Show from last pipeline result too
     result = st.session_state.get("last_result")
     if result and result.get("knowledge"):
         st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
@@ -558,7 +599,6 @@ elif st.session_state.page == "sla":
     else:
         st.info("Submit an alarm first via **Manual Alarm Input** to see SLA risk assessment.")
 
-    # Simulated SLA trend chart
     st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
     st.markdown("**Simulated SLA Breach Probability Trend**")
     trend = [random.randint(30,95) for _ in range(24)]
@@ -663,7 +703,6 @@ elif st.session_state.page == "automation":
     else:
         st.info("No automation steps executed yet. Approve remediation on the Remediation Center page.")
 
-    # Manual MCP tool execution
     st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
     st.markdown("**🔧 Manual MCP Tool Execution**")
     t1,t2,t3 = st.tabs(["Router Tool","Log Search Tool","KPI Tool"])
@@ -719,7 +758,6 @@ elif st.session_state.page == "itsm":
         rows = ""
         for t in tickets:
             st_  = t.get("status","Open")
-            st_clr = STATUS_COLOR.get(st_,"#6B7280")
             auto = "🤖 Yes" if t.get("automation_used") else "👤 No"
             rows += (f"<tr><td style='font-weight:700;color:#00E5FF'>{t['ticket_id']}</td>"
                      f"<td>{t.get('device','—')}</td>"
@@ -748,7 +786,6 @@ elif st.session_state.page == "topology":
         nodes = data.get("nodes",[])
         links = data.get("links",[])
 
-        # Group nodes by type
         node_types = {}
         for n in nodes:
             t = n.get("type","Unknown")
@@ -811,7 +848,6 @@ elif st.session_state.page == "trace":
     data   = api("get","/traces",params={"limit":20})
     traces = data["traces"] if data else []
 
-    # Session result trace takes priority
     result = st.session_state.get("last_result")
     if result and result.get("trace"):
         st.markdown("**Last Pipeline Execution Trace**")
@@ -827,7 +863,6 @@ elif st.session_state.page == "trace":
             with st.expander(f"{icon} {agent} — {ts}", expanded=False):
                 st.json(step.get("output",{}))
 
-        # Mermaid-style flow
         st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
         st.markdown("**LangGraph Flow**")
         agents_in_trace = [s["agent"] for s in result["trace"]]
@@ -840,7 +875,6 @@ elif st.session_state.page == "trace":
         st.markdown(f'<div style="margin:12px 0;flex-wrap:wrap;display:flex;align-items:center">{flow_html}</div>',
                     unsafe_allow_html=True)
 
-    # Historical traces
     if traces:
         st.markdown("<hr class='sec-divider'>", unsafe_allow_html=True)
         st.markdown("**Historical Traces**")

@@ -2,49 +2,45 @@
 NOC Agentic Copilot - Backend
 FastAPI + LangGraph + FAISS + 8 Agents
 Run: uvicorn backend:app --host 0.0.0.0 --port 8000 --reload
+
+FIX 1: Automation agent no longer randomly returns "Partial" — all automated steps succeed.
+FIX 2: Remediation approval updates the EXISTING ticket instead of creating a new one.
+FIX 3: Remediation agent uses alarm-aware fallback steps (not hardcoded BGP).
+FIX 4: Manual alarm input now persists to alarms.json so it appears in the alarm list.
 """
 
-import os, json, csv, random, uuid, logging, httpx, asyncio
+import os, json, random, uuid, logging, httpx
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Optional, Annotated
+from typing import Any, Optional
 from contextlib import asynccontextmanager
 
-# ── FastAPI ────────────────────────────────────────────────────────────────────
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-# ── LangChain / LangGraph ──────────────────────────────────────────────────────
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import FakeEmbeddings
 from langchain_core.documents import Document
 from langgraph.graph import StateGraph, END
-from langgraph.graph.message import add_messages
 from typing_extensions import TypedDict
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("noc_copilot")
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 1.  LLM FACTORY
+# 1. LLM FACTORY
 # ═══════════════════════════════════════════════════════════════════════════════
 _http_client = httpx.Client(verify=False, timeout=120)
 
 def get_llm():
-    provider  = os.environ.get("LLM_PROVIDER", "openai_custom")
-    model     = os.environ.get("CUSTOM_MODEL_NAME", "Qwen3-30B-A3B")
-    base_url  = os.environ.get("BASE_URL", "https://clever-peaches-judge.loca.lt/v1")
-    api_key   = os.environ.get("OPENAI_API_KEY", "abc-123")
-    if provider == "gemini":
-        return ChatGoogleGenerativeAI(
-            model="gemini-2.5-flash",
-            google_api_key=os.environ.get("GOOGLE_API_KEY", ""),
-            temperature=0,
-        )
+    provider = os.environ.get("LLM_PROVIDER", "openai_custom")
+    model    = os.environ.get("CUSTOM_MODEL_NAME", "Qwen3-30B-A3B")
+    base_url = os.environ.get("BASE_URL", "https://afraid-aliens-read.loca.lt/v1")
+    api_key  = os.environ.get("OPENAI_API_KEY", "abc-123")
     if provider == "openai_custom":
         return ChatOpenAI(
             model=model,
@@ -56,18 +52,20 @@ def get_llm():
             http_client=_http_client,
             default_headers={"Authorization": f"Bearer {api_key}"},
         )
-    raise ValueError(f"Unknown LLM_PROVIDER: '{provider}'. Use 'openai_custom' or 'gemini'.")
+    raise ValueError(f"Unknown LLM_PROVIDER: '{provider}'.")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 2.  SAMPLE DATA GENERATION
+# 2. SAMPLE DATA GENERATION
 # ═══════════════════════════════════════════════════════════════════════════════
 DATA_DIR = Path("noc_data")
 DATA_DIR.mkdir(exist_ok=True)
 
-DEVICES   = ["RTR-CORE-01","RTR-CORE-02","RTR-EDGE-01","RTR-EDGE-02",
-              "SW-AGG-01","SW-AGG-02","FIREWALL-01","FIREWALL-02",
-              "LB-01","PE-RTR-01","PE-RTR-02","CE-RTR-01"]
+DEVICES = [
+    "RTR-CORE-01","RTR-CORE-02","RTR-EDGE-01","RTR-EDGE-02",
+    "SW-AGG-01","SW-AGG-02","FIREWALL-01","FIREWALL-02",
+    "LB-01","PE-RTR-01","PE-RTR-02","CE-RTR-01",
+]
 ALARM_TYPES = [
     ("BGP Neighbor Down",       "Critical"),
     ("OSPF Adjacency Failure",  "Critical"),
@@ -90,9 +88,14 @@ def _rand_ts(days_back=7):
     return (datetime.utcnow() - timedelta(
         days=random.randint(0, days_back),
         hours=random.randint(0, 23),
-        minutes=random.randint(0, 59)
+        minutes=random.randint(0, 59),
     )).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+def _save_alarms():
+    """Persist in-memory alarm store to disk."""
+    (DATA_DIR / "alarms.json").write_text(
+        json.dumps(_alarms_store, indent=2), encoding="utf-8"
+    )
 
 def generate_alarms(n=100):
     path = DATA_DIR / "alarms.json"
@@ -100,40 +103,39 @@ def generate_alarms(n=100):
     for i in range(n):
         atype, sev = random.choice(ALARM_TYPES)
         alarms.append({
-            "alarm_id":   f"ALM-{2026000+i}",
-            "device":     random.choice(DEVICES),
-            "alarm":      atype,
-            "severity":   sev,
-            "timestamp":  _rand_ts(),
-            "status":     random.choice(["Open","Acknowledged","Resolved"]),
+            "alarm_id":  f"ALM-{2026000+i}",
+            "device":    random.choice(DEVICES),
+            "alarm":     atype,
+            "severity":  sev,
+            "timestamp": _rand_ts(),
+            "status":    random.choice(["Open","Acknowledged","Resolved"]),
             "kpi": {
-                "cpu":    random.randint(10, 99),
-                "memory": random.randint(20, 98),
-                "packet_loss": round(random.uniform(0, 20), 2),
-                "latency_ms": random.randint(1, 500),
+                "cpu":            random.randint(10, 99),
+                "memory":         random.randint(20, 98),
+                "packet_loss":    round(random.uniform(0, 20), 2),
+                "latency_ms":     random.randint(1, 500),
                 "bandwidth_util": random.randint(5, 99),
-            }
+            },
         })
     path.write_text(json.dumps(alarms, indent=2), encoding="utf-8")
     log.info(f"Generated {n} alarms -> {path}")
     return alarms
 
-
 def generate_incidents(alarms, n=50):
     path = DATA_DIR / "incidents.json"
     incidents = []
     for i in range(n):
-        group_alarms = random.sample(alarms, k=random.randint(2, 5))
-        devices      = list({a["device"] for a in group_alarms})
+        group = random.sample(alarms, k=random.randint(2, 5))
+        devices = list({a["device"] for a in group})
         incidents.append({
-            "incident_id":     f"INC-2026-{i+1:03d}",
-            "group_id":        f"GRP-{i+1:03d}",
-            "alarm_ids":       [a["alarm_id"] for a in group_alarms],
+            "incident_id":      f"INC-2026-{i+1:03d}",
+            "group_id":         f"GRP-{i+1:03d}",
+            "alarm_ids":        [a["alarm_id"] for a in group],
             "affected_devices": devices,
-            "severity":        group_alarms[0]["severity"],
-            "timestamp":       _rand_ts(14),
-            "status":          random.choice(["Open","In Progress","Resolved"]),
-            "root_cause":      random.choice([
+            "severity":         group[0]["severity"],
+            "timestamp":        _rand_ts(14),
+            "status":           random.choice(["Open","In Progress","Resolved"]),
+            "root_cause":       random.choice([
                 "BGP session reset due to memory pressure",
                 "Fiber cut causing cascading link failures",
                 "CPU spike from routing loop",
@@ -143,7 +145,7 @@ def generate_incidents(alarms, n=50):
                 "Memory leak in routing daemon",
                 "OSPF metric change causing rerouting storm",
             ]),
-            "resolution":      random.choice([
+            "resolution": random.choice([
                 "Restarted BGP daemon; verified neighbor sessions",
                 "Rerouted traffic via backup fiber path",
                 "Cleared routing table cache; applied rate-limit",
@@ -155,9 +157,7 @@ def generate_incidents(alarms, n=50):
             ]),
         })
     path.write_text(json.dumps(incidents, indent=2), encoding="utf-8")
-    log.info(f"Generated {n} incidents -> {path}")
     return incidents
-
 
 def generate_sop():
     sop = """SOP-001: BGP Neighbor Down
@@ -213,9 +213,7 @@ Steps:
   4. Escalate to backbone team if transit provider involved.
 """
     (DATA_DIR / "sop_documents.txt").write_text(sop, encoding="utf-8")
-    log.info("Generated SOP documents")
     return sop
-
 
 def generate_vendor_kb():
     kb = """KB-001: Cisco IOS-XR BGP Memory Issue (CSCab12345)
@@ -244,9 +242,7 @@ Issue: MLAG peer-link flap causes split-brain; dual active state.
 Fix: Apply EOS 4.27.3F bugfix. Configure rapid recovery timers.
 """
     (DATA_DIR / "vendor_kb.txt").write_text(kb, encoding="utf-8")
-    log.info("Generated vendor KB")
     return kb
-
 
 def generate_runbooks():
     rb = """RUNBOOK-001: BGP Recovery Procedure
@@ -283,9 +279,7 @@ Steps:
   5. [Manual] Post-incident report within 4 hours
 """
     (DATA_DIR / "runbooks.txt").write_text(rb, encoding="utf-8")
-    log.info("Generated runbooks")
     return rb
-
 
 def generate_historical_incidents():
     hist = [
@@ -302,9 +296,7 @@ def generate_historical_incidents():
     ]
     path = DATA_DIR / "historical_incidents.json"
     path.write_text(json.dumps(hist, indent=2), encoding="utf-8")
-    log.info(f"Generated historical incidents -> {path}")
     return hist
-
 
 def generate_topology():
     topo = {
@@ -337,22 +329,20 @@ def generate_topology():
             {"source":"PE-RTR-01","target":"CE-RTR-01","type":"Customer","bandwidth":"1G"},
             {"source":"SW-AGG-01","target":"FIREWALL-01","type":"Security","bandwidth":"10G"},
             {"source":"FIREWALL-01","target":"LB-01","type":"DMZ","bandwidth":"10G"},
-        ]
+        ],
     }
     (DATA_DIR / "topology.json").write_text(json.dumps(topo, indent=2), encoding="utf-8")
-    log.info("Generated network topology")
     return topo
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 3.  FAISS VECTOR STORE
+# 3. FAISS VECTOR STORE
 # ═══════════════════════════════════════════════════════════════════════════════
 _vector_store: Optional[FAISS] = None
 
 def _safe_embeddings():
-    """Return real embeddings if key available, else FakeEmbeddings for demo."""
-    key = os.environ.get("OPENAI_API_KEY","")
-    base= os.environ.get("BASE_URL","")
+    key  = os.environ.get("OPENAI_API_KEY", "")
+    base = os.environ.get("BASE_URL", "")
     if key:
         try:
             return OpenAIEmbeddings(
@@ -362,46 +352,35 @@ def _safe_embeddings():
             )
         except Exception:
             pass
-    log.warning("No valid embedding key found - using FakeEmbeddings (semantic search disabled)")
+    log.warning("No valid embedding key — using FakeEmbeddings")
     return FakeEmbeddings(size=768)
-
 
 def build_vector_store():
     global _vector_store
-    emb   = _safe_embeddings()
-    docs  = []
-
+    emb  = _safe_embeddings()
+    docs = []
     hist_path = DATA_DIR / "historical_incidents.json"
     if hist_path.exists():
         for h in json.loads(hist_path.read_text(encoding="utf-8")):
             text = (f"Incident: {h['incident']}\n"
                     f"Root Cause: {h['root_cause']}\n"
                     f"Resolution: {h['resolution']}")
-            docs.append(Document(page_content=text,
-                                 metadata={"source":"historical","type":"incident"}))
-
-    for fname, src in [("sop_documents.txt","sop"),
-                       ("vendor_kb.txt","vendor_kb"),
-                       ("runbooks.txt","runbook")]:
-        path = DATA_DIR / fname
-        if path.exists():
-            chunks = path.read_text(encoding="utf-8").split("\n\n")
-            for chunk in chunks:
+            docs.append(Document(page_content=text, metadata={"source":"historical"}))
+    for fname, src in [("sop_documents.txt","sop"),("vendor_kb.txt","vendor_kb"),("runbooks.txt","runbook")]:
+        p = DATA_DIR / fname
+        if p.exists():
+            for chunk in p.read_text(encoding="utf-8").split("\n\n"):
                 if len(chunk.strip()) > 30:
-                    docs.append(Document(page_content=chunk.strip(),
-                                         metadata={"source":src}))
-
+                    docs.append(Document(page_content=chunk.strip(), metadata={"source":src}))
     if not docs:
         docs = [Document(page_content="NOC placeholder document")]
-
     _vector_store = FAISS.from_documents(docs, emb)
-    log.info(f"FAISS vector store built with {len(docs)} documents")
+    log.info(f"FAISS built with {len(docs)} documents")
     return _vector_store
-
 
 def retrieve_knowledge(query: str, k: int = 4) -> list[dict]:
     if _vector_store is None:
-        return [{"content": "Vector store not initialised", "source": "none", "score": 0}]
+        return [{"content":"Vector store not initialised","source":"none","score":0}]
     results = _vector_store.similarity_search_with_score(query, k=k)
     return [{"content": doc.page_content,
              "source":  doc.metadata.get("source","unknown"),
@@ -409,7 +388,7 @@ def retrieve_knowledge(query: str, k: int = 4) -> list[dict]:
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 4.  IN-MEMORY STATE STORES
+# 4. IN-MEMORY STATE STORES
 # ═══════════════════════════════════════════════════════════════════════════════
 _alarms_store:    list[dict] = []
 _incidents_store: list[dict] = []
@@ -423,44 +402,222 @@ def _load_stores():
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 5.  LANGGRAPH STATE
+# 5. LANGGRAPH STATE
 # ═══════════════════════════════════════════════════════════════════════════════
 class NOCState(TypedDict):
-    alarm:              dict
-    normalized_alarm:   Optional[dict]
-    correlation:        Optional[dict]
-    root_cause:         Optional[dict]
-    knowledge:          Optional[list]
-    sla_risk:           Optional[dict]
-    remediation:        Optional[dict]
-    automation_result:  Optional[dict]
-    ticket:             Optional[dict]
-    human_approved:     bool
-    trace:              list[dict]
+    alarm:             dict
+    normalized_alarm:  Optional[dict]
+    correlation:       Optional[dict]
+    root_cause:        Optional[dict]
+    knowledge:         Optional[list]
+    sla_risk:          Optional[dict]
+    remediation:       Optional[dict]
+    automation_result: Optional[dict]
+    ticket:            Optional[dict]
+    human_approved:    bool
+    trace:             list[dict]
 
 
 def _llm_call(system: str, user: str) -> str:
-    """Safe LLM call with fallback."""
     try:
         llm  = get_llm()
         resp = llm.invoke([SystemMessage(content=system), HumanMessage(content=user)])
         return resp.content
     except Exception as e:
-        log.warning(f"LLM call failed: {e} - returning mock response")
+        log.warning(f"LLM call failed: {e}")
         return json.dumps({"error": str(e), "fallback": True})
 
 
-# ── Agent 1: Alarm Ingestion ───────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════════
+# 5b. ALARM-AWARE REMEDIATION FALLBACK
+# ═══════════════════════════════════════════════════════════════════════════════
+def _get_fallback_remediation(alarm_type: str, kpi: dict) -> dict:
+    a = alarm_type.upper()
+
+    if "MEMORY" in a or "LEAK" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Identify top memory-consuming processes","command":"show processes memory sorted","automated":True},
+                {"step_number":2,"action":"Check memory utilization trend over last hour","command":"show memory statistics history","automated":True},
+                {"step_number":3,"action":"Restart leaking routing daemon (schedule maintenance window)","command":"systemctl restart routing-daemon","automated":False},
+                {"step_number":4,"action":"Verify memory stabilizes after restart","command":"show processes memory sorted","automated":True},
+                {"step_number":5,"action":"Apply vendor patch for memory leak if available","command":None,"automated":False},
+                {"step_number":6,"action":"Schedule hardware memory upgrade if issue recurs","command":None,"automated":False},
+            ],
+            "risk_score":"High","success_probability":82,"estimated_duration_minutes":25,
+            "rollback_plan":"Restore previous daemon version from backup; revert patch if applied",
+        }
+    elif "BGP" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Verify BGP neighbor reachability","command":"ping <neighbor_ip>","automated":True},
+                {"step_number":2,"action":"Clear BGP session soft reset","command":"clear ip bgp <neighbor> soft","automated":True},
+                {"step_number":3,"action":"Check BGP logs for error cause","command":"show logging | include BGP","automated":True},
+                {"step_number":4,"action":"Restart BGP daemon if session not re-established","command":"systemctl restart bgpd","automated":False},
+                {"step_number":5,"action":"Verify route table restoration","command":"show ip bgp summary","automated":True},
+                {"step_number":6,"action":"Confirm with customer that traffic is restored","command":None,"automated":False},
+            ],
+            "risk_score":"Medium","success_probability":87,"estimated_duration_minutes":15,
+            "rollback_plan":"Restore BGP config from last known good backup",
+        }
+    elif "OSPF" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Check OSPF neighbor state","command":"show ip ospf neighbor","automated":True},
+                {"step_number":2,"action":"Verify MTU consistency on peer links","command":"show interface <intf> | include MTU","automated":True},
+                {"step_number":3,"action":"Increase OSPF dead interval to 40s if hello drift suspected","command":"ip ospf dead-interval 40","automated":False},
+                {"step_number":4,"action":"Clear OSPF process to force re-adjacency","command":"clear ip ospf process","automated":False},
+                {"step_number":5,"action":"Verify adjacency re-established","command":"show ip ospf neighbor","automated":True},
+            ],
+            "risk_score":"Medium","success_probability":85,"estimated_duration_minutes":20,
+            "rollback_plan":"Revert dead-interval to default; restore OSPF config from backup",
+        }
+    elif "CPU" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Identify top CPU-consuming processes","command":"show processes cpu sorted","automated":True},
+                {"step_number":2,"action":"Check for routing loops in route table","command":"show ip route summary","automated":True},
+                {"step_number":3,"action":"Apply CPU rate-limiting threshold","command":"router cpu-threshold 80","automated":False},
+                {"step_number":4,"action":"Restart offending process if safe","command":"systemctl restart <process>","automated":False},
+                {"step_number":5,"action":"Engage vendor TAC if hardware fault suspected","command":None,"automated":False},
+            ],
+            "risk_score":"High","success_probability":78,"estimated_duration_minutes":30,
+            "rollback_plan":"Remove CPU rate-limit config if it causes traffic issues",
+        }
+    elif "INTERFACE" in a or "FLAPPING" in a or "CRC" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Check interface error counters","command":"show interface <intf> counters error","automated":True},
+                {"step_number":2,"action":"Inspect SFP and fiber connectors physically","command":None,"automated":False},
+                {"step_number":3,"action":"Enable interface dampening to reduce log storms","command":"interface dampening half-life 5 reuse 1000 suppress 2000 max-suppress 20","automated":False},
+                {"step_number":4,"action":"Replace faulty SFP transceiver if errors persist","command":None,"automated":False},
+                {"step_number":5,"action":"Run BERT test after SFP replacement","command":"test interface bert <intf>","automated":True},
+            ],
+            "risk_score":"Medium","success_probability":83,"estimated_duration_minutes":45,
+            "rollback_plan":"Remove dampening config; restore original interface settings",
+        }
+    elif "LINK DOWN" in a or "FIBER" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Confirm link down via optical loss readings (OTDR)","command":"show interface <intf> transceiver","automated":True},
+                {"step_number":2,"action":"Activate backup path immediately","command":"ip route <prefix> <backup-next-hop>","automated":False},
+                {"step_number":3,"action":"Monitor traffic switchover via NetFlow","command":"show ip flow top-talkers","automated":True},
+                {"step_number":4,"action":"Notify NOC Bridge and dispatch field crew for repair","command":None,"automated":False},
+                {"step_number":5,"action":"Restore primary path after physical repair confirmed","command":"no ip route <prefix> <backup-next-hop>","automated":False},
+            ],
+            "risk_score":"High","success_probability":75,"estimated_duration_minutes":60,
+            "rollback_plan":"Revert to backup path if primary repair fails; escalate to Tier-3",
+        }
+    elif "PACKET" in a or "LOSS" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Run traceroute to isolate packet loss point","command":"traceroute <destination> source <local-ip>","automated":True},
+                {"step_number":2,"action":"Check interface error counters and queue drops","command":"show interface counters error","automated":True},
+                {"step_number":3,"action":"Review QoS queue statistics","command":"show policy-map interface","automated":True},
+                {"step_number":4,"action":"Apply traffic shaping or QoS policy adjustment","command":"policy-map QOS_REMEDIATION","automated":False},
+                {"step_number":5,"action":"Escalate to backbone team if transit provider involved","command":None,"automated":False},
+            ],
+            "risk_score":"Medium","success_probability":80,"estimated_duration_minutes":20,
+            "rollback_plan":"Remove QoS policy if it causes further traffic degradation",
+        }
+    elif "CORE ROUTER" in a or "ROUTER FAILURE" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Verify standby router readiness and sync state","command":"show redundancy state","automated":True},
+                {"step_number":2,"action":"Execute HSRP/VRRP failover to standby","command":"router hsrp preempt","automated":False},
+                {"step_number":3,"action":"Bring up backup interfaces","command":"interface <backup-intf> no shutdown","automated":True},
+                {"step_number":4,"action":"Notify customers via NMS alert","command":None,"automated":False},
+                {"step_number":5,"action":"Conduct root cause analysis within 2 hours","command":None,"automated":False},
+            ],
+            "risk_score":"High","success_probability":70,"estimated_duration_minutes":30,
+            "rollback_plan":"Revert failover if standby router is unstable; engage vendor TAC",
+        }
+    elif "MPLS" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Verify MPLS label switched paths (LSPs)","command":"show mpls ldp neighbor","automated":True},
+                {"step_number":2,"action":"Check MPLS forwarding table","command":"show mpls forwarding-table","automated":True},
+                {"step_number":3,"action":"Restore MPLS config from last known good backup","command":None,"automated":False},
+                {"step_number":4,"action":"Re-verify LSPs after config restore","command":"show mpls ldp neighbor","automated":True},
+                {"step_number":5,"action":"Escalate to MPLS team if LSPs not restored","command":None,"automated":False},
+            ],
+            "risk_score":"High","success_probability":79,"estimated_duration_minutes":35,
+            "rollback_plan":"Roll back MPLS config changes to previous state",
+        }
+    elif "ROUTE" in a and "OVERFLOW" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Check current route table size","command":"show ip route summary","automated":True},
+                {"step_number":2,"action":"Apply max-prefix limit on BGP peers","command":"neighbor <peer> maximum-prefix 750000","automated":False},
+                {"step_number":3,"action":"Filter bogon routes from transit peers","command":"ip prefix-list BOGONS deny <bogon-prefix>","automated":False},
+                {"step_number":4,"action":"Verify route table size reduced","command":"show ip route summary","automated":True},
+            ],
+            "risk_score":"High","success_probability":85,"estimated_duration_minutes":20,
+            "rollback_plan":"Remove max-prefix limit if legitimate routes are being filtered",
+        }
+    elif "NTP" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Check NTP synchronization status","command":"show ntp status","automated":True},
+                {"step_number":2,"action":"Verify NTP server reachability","command":"ping <ntp-server-ip>","automated":True},
+                {"step_number":3,"action":"Re-configure NTP server if unreachable","command":"ntp server <backup-ntp-ip>","automated":False},
+                {"step_number":4,"action":"Force NTP re-sync","command":"ntp update-calendar","automated":True},
+            ],
+            "risk_score":"Low","success_probability":92,"estimated_duration_minutes":10,
+            "rollback_plan":"Revert to previous NTP server configuration",
+        }
+    elif "DHCP" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Check DHCP pool utilization","command":"show ip dhcp pool","automated":True},
+                {"step_number":2,"action":"Identify and release stale DHCP bindings","command":"clear ip dhcp binding *","automated":False},
+                {"step_number":3,"action":"Expand DHCP pool range if stale release insufficient","command":"ip dhcp pool <pool-name> network <new-range>","automated":False},
+                {"step_number":4,"action":"Verify DHCP pool has available addresses","command":"show ip dhcp pool","automated":True},
+            ],
+            "risk_score":"Medium","success_probability":88,"estimated_duration_minutes":15,
+            "rollback_plan":"Revert DHCP pool changes; restore original range",
+        }
+    elif "SPANNING" in a or "STP" in a:
+        return {
+            "steps": [
+                {"step_number":1,"action":"Check spanning tree topology changes","command":"show spanning-tree detail","automated":True},
+                {"step_number":2,"action":"Identify root bridge and verify correctness","command":"show spanning-tree root","automated":True},
+                {"step_number":3,"action":"Enable BPDU guard on access ports","command":"spanning-tree portfast bpduguard default","automated":False},
+                {"step_number":4,"action":"Configure portfast on access ports","command":"spanning-tree portfast","automated":False},
+                {"step_number":5,"action":"Verify topology stabilizes","command":"show spanning-tree detail","automated":True},
+            ],
+            "risk_score":"Medium","success_probability":84,"estimated_duration_minutes":25,
+            "rollback_plan":"Remove BPDU guard and portfast if it causes connectivity issues",
+        }
+    else:
+        cpu = kpi.get("cpu", 0)
+        mem = kpi.get("memory", 0)
+        return {
+            "steps": [
+                {"step_number":1,"action":f"Investigate '{alarm_type}' — collect device logs","command":"show log | tail -200","automated":True},
+                {"step_number":2,"action":"Collect full diagnostics bundle","command":"show tech-support","automated":True},
+                {"step_number":3,"action":f"Check CPU ({cpu}%) and Memory ({mem}%) utilization","command":"show processes cpu sorted","automated":True},
+                {"step_number":4,"action":"Escalate to Tier-2 NOC with diagnostics","command":None,"automated":False},
+                {"step_number":5,"action":"Engage vendor TAC if issue persists beyond 30 minutes","command":None,"automated":False},
+            ],
+            "risk_score":"Medium","success_probability":70,"estimated_duration_minutes":30,
+            "rollback_plan":"Restore device config from last known good backup",
+        }
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 6. AGENTS
+# ═══════════════════════════════════════════════════════════════════════════════
+
 def alarm_ingestion_agent(state: NOCState) -> NOCState:
-    alarm = state["alarm"]
-    prompt = f"""You are a Telecom NOC Alarm Ingestion Agent.
-Normalize this alarm, remove noise, classify severity and return ONLY valid JSON.
-Input alarm: {json.dumps(alarm)}
-Return JSON with keys: normalized_alarm, severity, confidence (0-100), category, affected_service"""
+    alarm  = state["alarm"]
+    prompt = (f"You are a Telecom NOC Alarm Ingestion Agent.\n"
+              f"Normalize this alarm, remove noise, classify severity and return ONLY valid JSON.\n"
+              f"Input alarm: {json.dumps(alarm)}\n"
+              f"Return JSON with keys: normalized_alarm, severity, confidence (0-100), category, affected_service")
     raw = _llm_call("You normalize telecom alarms. Return ONLY JSON, no markdown.", prompt)
     try:
-        clean = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        norm  = json.loads(clean)
+        norm = json.loads(raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip())
     except Exception:
         norm = {
             "normalized_alarm": alarm.get("alarm","Unknown"),
@@ -474,21 +631,19 @@ Return JSON with keys: normalized_alarm, severity, confidence (0-100), category,
     return state
 
 
-# ── Agent 2: Event Correlation ─────────────────────────────────────────────────
 def event_correlation_agent(state: NOCState) -> NOCState:
-    alarm = state["normalized_alarm"] or state["alarm"]
+    alarm   = state["normalized_alarm"] or state["alarm"]
     device  = state["alarm"].get("device","")
     related = [a for a in _alarms_store if a.get("device") == device][:5]
-    prompt  = f"""You are a Telecom Event Correlation Agent.
-Primary alarm: {json.dumps(alarm)}
-Related alarms on same device: {json.dumps(related)}
-Identify cascading failures and correlation groups. Return ONLY JSON with keys:
-group_id, affected_devices (list), correlated_alarms (list of alarm types),
-cascading_failure (bool), confidence (0-100), incident_type"""
+    prompt  = (f"You are a Telecom Event Correlation Agent.\n"
+               f"Primary alarm: {json.dumps(alarm)}\n"
+               f"Related alarms on same device: {json.dumps(related)}\n"
+               f"Return ONLY JSON with keys:\n"
+               f"group_id, affected_devices (list), correlated_alarms (list of alarm types),\n"
+               f"cascading_failure (bool), confidence (0-100), incident_type")
     raw = _llm_call("You correlate telecom events. Return ONLY JSON.", prompt)
     try:
-        clean = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        corr  = json.loads(clean)
+        corr = json.loads(raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip())
     except Exception:
         corr = {
             "group_id":          f"GRP-{uuid.uuid4().hex[:6].upper()}",
@@ -503,32 +658,59 @@ cascading_failure (bool), confidence (0-100), incident_type"""
     return state
 
 
-# ── Agent 3: Root Cause Analysis ───────────────────────────────────────────────
 def root_cause_agent(state: NOCState) -> NOCState:
-    alarm = state["normalized_alarm"] or state["alarm"]
-    kpi   = state["alarm"].get("kpi", {})
-    prompt = f"""You are a Telecom Root Cause Analysis (RCA) Agent.
-Alarm: {json.dumps(alarm)}
-KPI metrics: {json.dumps(kpi)}
-Correlation data: {json.dumps(state.get('correlation',{}))}
-Perform deep RCA. Return ONLY JSON with keys:
-root_cause (string), contributing_factors (list), confidence (0-100),
-impact_scope (Local/Regional/National), estimated_recovery_time_minutes (int)"""
+    alarm      = state["normalized_alarm"] or state["alarm"]
+    alarm_type = state["alarm"].get("alarm","")
+    kpi        = state["alarm"].get("kpi", {})
+    prompt     = (f"You are a Telecom Root Cause Analysis (RCA) Agent.\n"
+                  f"Alarm: {json.dumps(alarm)}\nKPI metrics: {json.dumps(kpi)}\n"
+                  f"Correlation data: {json.dumps(state.get('correlation', {}))}\n"
+                  f"Return ONLY JSON with keys:\n"
+                  f"root_cause (string), contributing_factors (list), confidence (0-100),\n"
+                  f"impact_scope (Local/Regional/National), estimated_recovery_time_minutes (int)")
     raw = _llm_call("You perform root cause analysis. Return ONLY JSON.", prompt)
     try:
-        clean = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        rca   = json.loads(clean)
+        rca = json.loads(raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip())
     except Exception:
-        cpu  = kpi.get("cpu", 0)
-        mem  = kpi.get("memory", 0)
-        rca  = {
-            "root_cause": ("Memory leak causing routing daemon instability" if mem > 85
-                           else "CPU overload causing packet drops" if cpu > 90
-                           else "Network configuration or physical layer fault"),
+        cpu = kpi.get("cpu", 0)
+        mem = kpi.get("memory", 0)
+        a   = alarm_type.upper()
+        if "MEMORY" in a or "LEAK" in a:
+            root = "Memory leak in routing daemon causing gradual memory exhaustion"
+        elif "BGP" in a:
+            root = "BGP session dropped due to keepalive timeout or memory pressure"
+        elif "CPU" in a:
+            root = "CPU overload caused by routing loop or high-volume traffic processing"
+        elif "PACKET" in a or "LOSS" in a:
+            root = "Interface queue congestion causing packet drops"
+        elif "INTERFACE" in a or "FLAPPING" in a or "CRC" in a:
+            root = "Faulty SFP transceiver or fiber causing repeated link state changes"
+        elif "FIBER" in a or "LINK DOWN" in a:
+            root = "Physical fiber damage or connector fault causing link loss"
+        elif "OSPF" in a:
+            root = "OSPF adjacency lost due to MTU mismatch or hello timer drift"
+        elif "MPLS" in a:
+            root = "MPLS misconfiguration or label stack corruption after maintenance"
+        elif "ROUTE" in a:
+            root = "Routing table overflow from unconstrained prefix acceptance"
+        elif "NTP" in a:
+            root = "NTP server unreachable causing clock drift on device"
+        elif "DHCP" in a:
+            root = "DHCP pool exhausted due to stale leases or subnet undersizing"
+        elif "SPANNING" in a or "STP" in a:
+            root = "Spanning tree topology change causing brief forwarding instability"
+        elif "CORE ROUTER" in a:
+            root = "Core router hardware failure — PSU or board-level fault"
+        else:
+            root = ("Memory leak causing routing daemon instability" if mem > 85
+                    else "CPU overload causing packet drops" if cpu > 90
+                    else f"Network fault: {alarm_type}")
+        rca = {
+            "root_cause":        root,
             "contributing_factors": [f"CPU:{cpu}%", f"Memory:{mem}%",
                                      f"Packet Loss:{kpi.get('packet_loss',0)}%"],
-            "confidence":           87,
-            "impact_scope":         "Regional",
+            "confidence":        87,
+            "impact_scope":      "Regional",
             "estimated_recovery_time_minutes": 20,
         }
     state["root_cause"] = rca
@@ -536,7 +718,6 @@ impact_scope (Local/Regional/National), estimated_recovery_time_minutes (int)"""
     return state
 
 
-# ── Agent 4: Knowledge Retrieval ───────────────────────────────────────────────
 def knowledge_retrieval_agent(state: NOCState) -> NOCState:
     alarm   = state["normalized_alarm"] or state["alarm"]
     query   = f"{alarm.get('normalized_alarm', alarm.get('alarm',''))} {alarm.get('category','')}"
@@ -546,86 +727,81 @@ def knowledge_retrieval_agent(state: NOCState) -> NOCState:
     return state
 
 
-# ── Agent 5: SLA Risk ──────────────────────────────────────────────────────────
 def sla_risk_agent(state: NOCState) -> NOCState:
-    alarm = state["normalized_alarm"] or state["alarm"]
-    rca   = state.get("root_cause", {})
-    prompt = f"""You are a Telecom SLA Risk Assessment Agent.
-Alarm: {json.dumps(alarm)}
-Root cause: {json.dumps(rca)}
-Calculate SLA breach risk. Return ONLY JSON with keys:
-sla_risk (Low/Medium/High/Critical), breach_probability (0-100),
-breach_type (Availability/Latency/Packet_Loss), time_to_breach_minutes (int),
-escalation_required (bool), escalation_level (NOC-L1/NOC-L2/NOC-L3/Management)"""
+    alarm  = state["normalized_alarm"] or state["alarm"]
+    rca    = state.get("root_cause", {})
+    prompt = (f"You are a Telecom SLA Risk Assessment Agent.\n"
+              f"Alarm: {json.dumps(alarm)}\nRoot cause: {json.dumps(rca)}\n"
+              f"Return ONLY JSON with keys:\n"
+              f"sla_risk (Low/Medium/High/Critical), breach_probability (0-100),\n"
+              f"breach_type (Availability/Latency/Packet_Loss), time_to_breach_minutes (int),\n"
+              f"escalation_required (bool), escalation_level (NOC-L1/NOC-L2/NOC-L3/Management)")
     raw = _llm_call("You assess SLA breach risk. Return ONLY JSON.", prompt)
     try:
-        clean = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        sla   = json.loads(clean)
+        sla = json.loads(raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip())
     except Exception:
-        sev  = alarm.get("severity", "Minor")
+        sev  = alarm.get("severity","Minor")
         prob = {"Critical":91,"Major":72,"Minor":35,"Warning":15}.get(sev, 50)
         sla  = {
-            "sla_risk":              "High" if prob > 70 else "Medium" if prob > 40 else "Low",
-            "breach_probability":    prob,
-            "breach_type":           "Availability",
+            "sla_risk":               "High" if prob > 70 else "Medium" if prob > 40 else "Low",
+            "breach_probability":     prob,
+            "breach_type":            "Availability",
             "time_to_breach_minutes": 15 if prob > 70 else 60,
-            "escalation_required":   prob > 70,
-            "escalation_level":      "NOC-L2" if prob > 70 else "NOC-L1",
+            "escalation_required":    prob > 70,
+            "escalation_level":       "NOC-L2" if prob > 70 else "NOC-L1",
         }
     state["sla_risk"] = sla
     state["trace"].append({"agent":"SLARisk","output":sla,"ts":datetime.utcnow().isoformat()})
     return state
 
 
-# ── Parallel merge helper ──────────────────────────────────────────────────────
 def parallel_analysis(state: NOCState) -> NOCState:
-    """Run RCA, Knowledge and SLA agents; merge results into state."""
     state = root_cause_agent(state)
     state = knowledge_retrieval_agent(state)
     state = sla_risk_agent(state)
     return state
 
 
-# ── Agent 6: Remediation ───────────────────────────────────────────────────────
 def remediation_agent(state: NOCState) -> NOCState:
-    alarm = state["normalized_alarm"] or state["alarm"]
-    rca   = state.get("root_cause", {})
-    kb    = state.get("knowledge", [])
-    kb_text = "\n".join([k.get("content","") for k in kb[:3]])
-    prompt = f"""You are a Telecom Remediation Planning Agent.
-Alarm: {json.dumps(alarm)}
-Root Cause: {json.dumps(rca)}
-Relevant KB/SOP:
-{kb_text}
-Generate a detailed remediation plan. Return ONLY JSON with keys:
-steps (list of objects with: step_number int, action str, command str or null, automated bool),
-risk_score (Low/Medium/High), success_probability (0-100),
-estimated_duration_minutes (int), rollback_plan (str)"""
-    raw = _llm_call("You generate remediation plans. Return ONLY JSON.", prompt)
+    alarm_type = state["alarm"].get("alarm", "")
+    alarm      = state["normalized_alarm"] or state["alarm"]
+    kpi        = state["alarm"].get("kpi", {})
+    rca        = state.get("root_cause", {})
+    kb         = state.get("knowledge", [])
+    kb_text    = "\n".join([k.get("content","") for k in kb[:3]])
+
+    prompt = (f"You are a Telecom Remediation Planning Agent.\n"
+              f"Alarm Type: {alarm_type}\n"
+              f"Alarm Details: {json.dumps(alarm)}\n"
+              f"Root Cause: {json.dumps(rca)}\n"
+              f"KPI Metrics: {json.dumps(kpi)}\n"
+              f"Relevant KB/SOP:\n{kb_text}\n\n"
+              f"Generate a detailed remediation plan SPECIFIC to the alarm type '{alarm_type}'.\n"
+              f"Do NOT generate BGP steps unless this is a BGP alarm.\n"
+              f"Return ONLY JSON with keys:\n"
+              f"steps (list: step_number int, action str, command str or null, automated bool),\n"
+              f"risk_score (Low/Medium/High), success_probability (0-100),\n"
+              f"estimated_duration_minutes (int), rollback_plan (str)")
+
+    raw = _llm_call("You generate remediation plans specific to the alarm type. Return ONLY JSON.", prompt)
+    rem = None
     try:
         clean = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        rem   = json.loads(clean)
-    except Exception:
-        rem = {
-            "steps": [
-                {"step_number":1,"action":"Verify BGP neighbor reachability","command":"ping <neighbor_ip>","automated":True},
-                {"step_number":2,"action":"Clear BGP session","command":"clear ip bgp <neighbor> soft","automated":True},
-                {"step_number":3,"action":"Restart BGP daemon if session not established","command":"systemctl restart bgpd","automated":False},
-                {"step_number":4,"action":"Verify route table restoration","command":"show ip bgp summary","automated":True},
-                {"step_number":5,"action":"Confirm with customer / close ticket","command":None,"automated":False},
-            ],
-            "risk_score":                 "Medium",
-            "success_probability":        87,
-            "estimated_duration_minutes": 15,
-            "rollback_plan":             "Restore BGP config from last known good backup",
-        }
-    state["remediation"]   = rem
+        parsed = json.loads(clean)
+        if parsed.get("steps") and len(parsed["steps"]) > 0:
+            rem = parsed
+        else:
+            raise ValueError("LLM returned empty steps list")
+    except Exception as e:
+        log.warning(f"Remediation fallback triggered for '{alarm_type}': {e}")
+        rem = _get_fallback_remediation(alarm_type, kpi)
+
+    state["remediation"]    = rem
     state["human_approved"] = False
     state["trace"].append({"agent":"Remediation","output":rem,"ts":datetime.utcnow().isoformat()})
     return state
 
 
-# ── Agent 7: Automation ────────────────────────────────────────────────────────
 def automation_agent(state: NOCState) -> NOCState:
     if not state.get("human_approved", False):
         result = {"status":"Skipped","reason":"Awaiting human approval"}
@@ -633,21 +809,20 @@ def automation_agent(state: NOCState) -> NOCState:
         state["trace"].append({"agent":"Automation","output":result,"ts":datetime.utcnow().isoformat()})
         return state
 
-    steps  = state.get("remediation", {}).get("steps", [])
+    steps      = state.get("remediation", {}).get("steps", [])
     auto_steps = [s for s in steps if s.get("automated", False)]
-    results = []
+    results    = []
     for s in auto_steps:
         results.append({
-            "step":      s.get("step_number"),
-            "action":    s.get("action"),
-            "command":   s.get("command"),
-            "status":    random.choice(["Success","Success","Success","Partial"]),
-            "response":  f"Executed at {datetime.utcnow().strftime('%H:%M:%SZ')}",
+            "step":     s.get("step_number"),
+            "action":   s.get("action"),
+            "command":  s.get("command"),
+            "status":   "Success",
+            "response": f"Executed at {datetime.utcnow().strftime('%H:%M:%SZ')}",
         })
-
     auto_result = {
         "executed_steps": results,
-        "overall_status": "Success" if all(r["status"]=="Success" for r in results) else "Partial",
+        "overall_status": "Success",
         "timestamp":      datetime.utcnow().isoformat(),
     }
     state["automation_result"] = auto_result
@@ -655,35 +830,53 @@ def automation_agent(state: NOCState) -> NOCState:
     return state
 
 
-# ── Agent 8: ITSM ─────────────────────────────────────────────────────────────
 def itsm_agent(state: NOCState) -> NOCState:
-    alarm  = state["alarm"]
-    rca    = state.get("root_cause", {})
-    rem    = state.get("remediation", {})
-    ticket_id = f"INC-{datetime.utcnow().year}-{random.randint(1000,9999)}"
-    ticket = {
-        "ticket_id":    ticket_id,
-        "device":       alarm.get("device","Unknown"),
-        "alarm":        alarm.get("alarm","Unknown"),
-        "severity":     alarm.get("severity","Unknown"),
-        "root_cause":   rca.get("root_cause","Pending RCA"),
-        "status":       "Resolved" if state.get("human_approved") else "In Progress",
-        "priority":     "P1" if alarm.get("severity")=="Critical" else "P2",
-        "sla_risk":     state.get("sla_risk",{}).get("sla_risk","Unknown"),
-        "created_at":   datetime.utcnow().isoformat(),
-        "resolved_at":  datetime.utcnow().isoformat() if state.get("human_approved") else None,
-        "resolution":   rem.get("rollback_plan","Pending"),
-        "assigned_to":  "NOC-L2 Team",
-        "automation_used": state.get("human_approved", False),
-    }
-    _tickets_store.append(ticket)
+    alarm     = state["alarm"]
+    rca       = state.get("root_cause", {})
+    rem       = state.get("remediation", {})
+    approved  = state.get("human_approved", False)
+
+    alarm_id      = alarm.get("alarm_id", "")
+    existing_ticket = next(
+        (t for t in _tickets_store if t.get("alarm_id") == alarm_id),
+        None
+    )
+
+    if existing_ticket and approved:
+        existing_ticket["status"]         = "Resolved"
+        existing_ticket["resolved_at"]    = datetime.utcnow().isoformat()
+        existing_ticket["automation_used"] = True
+        existing_ticket["resolution"]     = rem.get("rollback_plan", "Automated remediation applied")
+        ticket = existing_ticket
+        log.info(f"ITSM: Updated existing ticket {ticket['ticket_id']} → Resolved")
+    else:
+        ticket_id = f"INC-{datetime.utcnow().year}-{random.randint(1000,9999)}"
+        ticket = {
+            "ticket_id":       ticket_id,
+            "alarm_id":        alarm_id,
+            "device":          alarm.get("device","Unknown"),
+            "alarm":           alarm.get("alarm","Unknown"),
+            "severity":        alarm.get("severity","Unknown"),
+            "root_cause":      rca.get("root_cause","Pending RCA"),
+            "status":          "Resolved" if approved else "In Progress",
+            "priority":        "P1" if alarm.get("severity")=="Critical" else "P2",
+            "sla_risk":        state.get("sla_risk",{}).get("sla_risk","Unknown"),
+            "created_at":      datetime.utcnow().isoformat(),
+            "resolved_at":     datetime.utcnow().isoformat() if approved else None,
+            "resolution":      rem.get("rollback_plan","Pending"),
+            "assigned_to":     "NOC-L2 Team",
+            "automation_used": approved,
+        }
+        _tickets_store.append(ticket)
+        log.info(f"ITSM: Created new ticket {ticket['ticket_id']}")
+
     state["ticket"] = ticket
     state["trace"].append({"agent":"ITSM","output":ticket,"ts":datetime.utcnow().isoformat()})
     return state
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 6.  LANGGRAPH WORKFLOW
+# 7. LANGGRAPH WORKFLOW
 # ═══════════════════════════════════════════════════════════════════════════════
 def build_graph():
     g = StateGraph(NOCState)
@@ -693,7 +886,6 @@ def build_graph():
     g.add_node("remediation",       remediation_agent)
     g.add_node("automation",        automation_agent)
     g.add_node("itsm",              itsm_agent)
-
     g.set_entry_point("alarm_ingestion")
     g.add_edge("alarm_ingestion",   "event_correlation")
     g.add_edge("event_correlation", "parallel_analysis")
@@ -704,7 +896,6 @@ def build_graph():
     return g.compile()
 
 _noc_graph = None
-
 def get_graph():
     global _noc_graph
     if _noc_graph is None:
@@ -713,7 +904,7 @@ def get_graph():
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 7.  MCP MOCK TOOLS
+# 8. MCP MOCK TOOLS
 # ═══════════════════════════════════════════════════════════════════════════════
 def tool_router_reset(device: str, action: str = "bgp_reset") -> dict:
     return {"tool":"RouterTool","device":device,"action":action,
@@ -725,30 +916,28 @@ def tool_ticket_create(payload: dict) -> dict:
             "status":"Created","payload":payload,"ts":datetime.utcnow().isoformat()}
 
 def tool_log_search(device: str, query: str) -> dict:
-    mock_logs = [
-        f"{device} 2026-06-12T10:00:00Z %BGP-5-ADJCHANGE: neighbor Down - BGP Notification sent",
-        f"{device} 2026-06-12T09:55:00Z %SYS-2-MALLOCFAIL: Memory allocation of 65536 bytes failed",
+    return {"tool":"LogSearchTool","device":device,"query":query,"results":[
+        f"{device} 2026-06-12T10:00:00Z %BGP-5-ADJCHANGE: neighbor Down",
+        f"{device} 2026-06-12T09:55:00Z %SYS-2-MALLOCFAIL: Memory allocation failed",
         f"{device} 2026-06-12T09:50:00Z %CPU-3-HIGH: CPU utilization 96% for 1 minute",
-    ]
-    return {"tool":"LogSearchTool","device":device,"query":query,
-            "results":mock_logs,"count":len(mock_logs)}
+    ],"count":3}
 
 def tool_kpi_fetch(device: str) -> dict:
     return {"tool":"KPITool","device":device,"metrics":{
-        "cpu":       random.randint(10,99),
-        "memory":    random.randint(20,98),
-        "packet_loss": round(random.uniform(0,15),2),
-        "latency_ms":  random.randint(1,300),
+        "cpu":            random.randint(10,99),
+        "memory":         random.randint(20,98),
+        "packet_loss":    round(random.uniform(0,15),2),
+        "latency_ms":     random.randint(1,300),
         "bandwidth_util": random.randint(5,99),
     },"ts":datetime.utcnow().isoformat()}
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 8.  FASTAPI APPLICATION
+# 9. FASTAPI APPLICATION
 # ═══════════════════════════════════════════════════════════════════════════════
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    log.info("=== NOC Copilot startup: generating sample data ===")
+    log.info("=== NOC Copilot startup ===")
     alarms = generate_alarms(100)
     generate_incidents(alarms, 50)
     generate_historical_incidents()
@@ -764,17 +953,15 @@ async def lifespan(app: FastAPI):
     log.info("NOC Copilot shutdown")
 
 app = FastAPI(title="NOC Agentic Copilot API", version="1.0.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=["*"],
-                   allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 
-# ── Request Models ─────────────────────────────────────────────────────────────
 class AlarmRequest(BaseModel):
-    device:    str
-    alarm:     str
-    severity:  str = "Major"
-    timestamp: Optional[str] = None
-    kpi:       Optional[dict] = None
+    device:       str
+    alarm:        str
+    severity:     str = "Major"
+    timestamp:    Optional[str] = None
+    kpi:          Optional[dict] = None
     auto_approve: bool = False
 
 class IncidentRequest(BaseModel):
@@ -788,19 +975,17 @@ class ExecuteRequest(BaseModel):
     device:      str
 
 class KPIInput(BaseModel):
-    device:          str
-    cpu:             Optional[float] = None
-    memory:          Optional[float] = None
-    packet_loss:     Optional[float] = None
-    latency_ms:      Optional[float] = None
-    bandwidth_util:  Optional[float] = None
+    device:         str
+    cpu:            Optional[float] = None
+    memory:         Optional[float] = None
+    packet_loss:    Optional[float] = None
+    latency_ms:     Optional[float] = None
+    bandwidth_util: Optional[float] = None
 
 
-# ── Endpoints ──────────────────────────────────────────────────────────────────
 @app.get("/health")
 def health():
     return {"status":"ok","agents":8,"vector_docs":"loaded","ts":datetime.utcnow().isoformat()}
-
 
 @app.get("/alarms")
 def get_alarms(limit: int = 50, severity: Optional[str] = None):
@@ -808,7 +993,6 @@ def get_alarms(limit: int = 50, severity: Optional[str] = None):
     if severity:
         data = [a for a in data if a.get("severity","").lower() == severity.lower()]
     return {"alarms": data[:limit], "total": len(data)}
-
 
 @app.post("/alarm")
 async def process_alarm(req: AlarmRequest, background_tasks: BackgroundTasks):
@@ -820,8 +1004,14 @@ async def process_alarm(req: AlarmRequest, background_tasks: BackgroundTasks):
         "timestamp": req.timestamp or datetime.utcnow().isoformat(),
         "kpi":       req.kpi or tool_kpi_fetch(req.device)["metrics"],
         "status":    "Open",
+        "source":    "manual",   # ← tag so UI can highlight it
     }
+
+    # ── FIX 4: Insert into memory AND persist to disk immediately ──────────
     _alarms_store.insert(0, alarm)
+    _save_alarms()
+    log.info(f"Manual alarm {alarm['alarm_id']} saved to disk. Store size: {len(_alarms_store)}")
+
     initial_state: NOCState = {
         "alarm":             alarm,
         "normalized_alarm":  None,
@@ -835,15 +1025,9 @@ async def process_alarm(req: AlarmRequest, background_tasks: BackgroundTasks):
         "human_approved":    req.auto_approve,
         "trace":             [],
     }
-    graph  = get_graph()
-    result = graph.invoke(initial_state)
-    trace_entry = {
-        "alarm_id":   alarm["alarm_id"],
-        "alarm":      alarm,
-        "result":     result,
-        "ts":         datetime.utcnow().isoformat(),
-    }
-    _traces_store.insert(0, trace_entry)
+    result = get_graph().invoke(initial_state)
+    _traces_store.insert(0, {"alarm_id":alarm["alarm_id"],"alarm":alarm,
+                              "result":result,"ts":datetime.utcnow().isoformat()})
     return {
         "alarm_id":          alarm["alarm_id"],
         "normalized_alarm":  result["normalized_alarm"],
@@ -860,7 +1044,6 @@ async def process_alarm(req: AlarmRequest, background_tasks: BackgroundTasks):
 
 @app.post("/alarm/approve/{alarm_id}")
 def approve_alarm(alarm_id: str):
-    """Human approval: re-run automation + ITSM for an existing trace."""
     trace = next((t for t in _traces_store if t["alarm_id"]==alarm_id), None)
     if not trace:
         raise HTTPException(404, f"No trace found for alarm {alarm_id}")
@@ -869,67 +1052,63 @@ def approve_alarm(alarm_id: str):
     state["trace"] = list(state.get("trace",[]))
     state = automation_agent(state)
     state = itsm_agent(state)
-    trace["result"] = state
-    return {"approved":True, "alarm_id":alarm_id,
-            "automation_result": state["automation_result"],
-            "ticket": state["ticket"]}
 
+    # Update alarm status to Resolved in store and persist
+    for a in _alarms_store:
+        if a.get("alarm_id") == alarm_id:
+            a["status"] = "Resolved"
+            break
+    _save_alarms()
+
+    trace["result"] = state
+    return {
+        "approved":          True,
+        "alarm_id":          alarm_id,
+        "automation_result": state["automation_result"],
+        "ticket":            state["ticket"],
+    }
 
 @app.post("/incident")
 def create_incident(req: IncidentRequest):
-    incident = {
-        "incident_id": req.incident_id,
-        "description": req.description,
-        "severity":    req.severity,
-        "status":      "Open",
-        "created_at":  datetime.utcnow().isoformat(),
-    }
+    incident = {"incident_id":req.incident_id,"description":req.description,
+                "severity":req.severity,"status":"Open","created_at":datetime.utcnow().isoformat()}
     _incidents_store.insert(0, incident)
-    return {"created": True, "incident": incident}
-
+    return {"created":True,"incident":incident}
 
 @app.get("/incidents")
 def get_incidents(limit: int = 50):
-    return {"incidents": _incidents_store[:limit], "total": len(_incidents_store)}
-
+    return {"incidents":_incidents_store[:limit],"total":len(_incidents_store)}
 
 @app.post("/execute")
 def execute_action(req: ExecuteRequest):
-    result = tool_router_reset(req.device, req.action)
-    return {"executed": True, "result": result}
-
+    return {"executed":True,"result":tool_router_reset(req.device, req.action)}
 
 @app.get("/ticket")
 def get_tickets(limit: int = 50):
-    return {"tickets": _tickets_store[:limit], "total": len(_tickets_store)}
-
+    return {"tickets":_tickets_store[:limit],"total":len(_tickets_store)}
 
 @app.get("/topology")
 def get_topology():
     path = DATA_DIR / "topology.json"
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"error":"topology not found"}
 
-
 @app.get("/knowledge")
 def search_knowledge(q: str = "BGP down", k: int = 5):
-    return {"query": q, "results": retrieve_knowledge(q, k)}
-
+    return {"query":q,"results":retrieve_knowledge(q, k)}
 
 @app.get("/traces")
 def get_traces(limit: int = 20):
-    return {"traces": _traces_store[:limit], "total": len(_traces_store)}
-
+    return {"traces":_traces_store[:limit],"total":len(_traces_store)}
 
 @app.post("/kpi")
 def submit_kpi(kpi: KPIInput):
-    """Manually inject KPI data."""
-    data = kpi.model_dump(exclude_none=True)
+    data   = kpi.model_dump(exclude_none=True)
     device = data.pop("device")
     for alarm in _alarms_store:
         if alarm.get("device") == device:
             alarm.setdefault("kpi", {}).update(data)
-    return {"updated": True, "device": device, "kpi": data}
-
+    _save_alarms()
+    return {"updated":True,"device":device,"kpi":data}
 
 @app.get("/mcp/router/{device}/{action}")
 def mcp_router(device: str, action: str):
@@ -947,7 +1126,6 @@ def mcp_kpi(device: str):
 def mcp_ticket(payload: dict):
     return tool_ticket_create(payload)
 
-
 @app.get("/sample/regenerate")
 def regenerate_data():
     alarms = generate_alarms(100)
@@ -959,8 +1137,7 @@ def regenerate_data():
     generate_topology()
     _load_stores()
     build_vector_store()
-    return {"regenerated": True, "alarms": 100, "incidents": 50}
-
+    return {"regenerated":True,"alarms":100,"incidents":50}
 
 if __name__ == "__main__":
     import uvicorn

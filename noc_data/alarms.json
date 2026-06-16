@@ -1,872 +1,888 @@
 [
   {
+    "alarm_id": "ALM-20737BC1",
+    "device": "SW-AGG-01",
+    "alarm": "Core Router Failure",
+    "severity": "Major",
+    "timestamp": "2026-06-16T16:35:24.516090",
+    "kpi": {
+      "cpu": 75,
+      "memory": 70,
+      "packet_loss": 10.5,
+      "latency_ms": 50,
+      "bandwidth_util": 60
+    },
+    "status": "Open",
+    "source": "manual"
+  },
+  {
     "alarm_id": "ALM-2026000",
-    "device": "RTR-CORE-01",
-    "alarm": "NTP Sync Failed",
-    "severity": "Minor",
-    "timestamp": "2026-06-07T17:28:24Z",
+    "device": "SW-AGG-02",
+    "alarm": "Route Table Overflow",
+    "severity": "Critical",
+    "timestamp": "2026-06-15T15:30:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 33,
-      "memory": 23,
-      "packet_loss": 8.98,
-      "latency_ms": 178,
-      "bandwidth_util": 75
+      "cpu": 79,
+      "memory": 95,
+      "packet_loss": 14.9,
+      "latency_ms": 190,
+      "bandwidth_util": 88
     }
   },
   {
     "alarm_id": "ALM-2026001",
-    "device": "RTR-EDGE-01",
-    "alarm": "Memory Leak Detected",
+    "device": "CE-RTR-01",
+    "alarm": "Route Table Overflow",
     "severity": "Critical",
-    "timestamp": "2026-06-15T11:38:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-12T21:25:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 55,
-      "memory": 38,
-      "packet_loss": 1.03,
-      "latency_ms": 469,
-      "bandwidth_util": 40
+      "cpu": 35,
+      "memory": 86,
+      "packet_loss": 2.13,
+      "latency_ms": 268,
+      "bandwidth_util": 64
     }
   },
   {
     "alarm_id": "ALM-2026002",
-    "device": "PE-RTR-02",
-    "alarm": "Fiber Cut Detected",
+    "device": "CE-RTR-01",
+    "alarm": "Memory Leak Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-10T10:49:24Z",
+    "timestamp": "2026-06-11T12:57:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 46,
-      "memory": 31,
-      "packet_loss": 10.8,
-      "latency_ms": 427,
-      "bandwidth_util": 81
+      "cpu": 28,
+      "memory": 47,
+      "packet_loss": 7.52,
+      "latency_ms": 47,
+      "bandwidth_util": 35
     }
   },
   {
     "alarm_id": "ALM-2026003",
-    "device": "RTR-EDGE-01",
-    "alarm": "Fiber Cut Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-12T05:16:24Z",
-    "status": "Acknowledged",
+    "device": "FIREWALL-01",
+    "alarm": "NTP Sync Failed",
+    "severity": "Minor",
+    "timestamp": "2026-06-15T09:02:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 84,
-      "memory": 77,
-      "packet_loss": 2.48,
-      "latency_ms": 233,
-      "bandwidth_util": 20
+      "cpu": 10,
+      "memory": 35,
+      "packet_loss": 14.11,
+      "latency_ms": 57,
+      "bandwidth_util": 76
     }
   },
   {
     "alarm_id": "ALM-2026004",
-    "device": "SW-AGG-01",
-    "alarm": "BGP Neighbor Down",
-    "severity": "Critical",
-    "timestamp": "2026-06-12T09:38:24Z",
+    "device": "FIREWALL-02",
+    "alarm": "Interface CRC Errors",
+    "severity": "Minor",
+    "timestamp": "2026-06-16T06:47:26Z",
     "status": "Resolved",
     "kpi": {
-      "cpu": 79,
-      "memory": 77,
-      "packet_loss": 9.62,
-      "latency_ms": 118,
-      "bandwidth_util": 92
+      "cpu": 35,
+      "memory": 54,
+      "packet_loss": 3.07,
+      "latency_ms": 342,
+      "bandwidth_util": 78
     }
   },
   {
     "alarm_id": "ALM-2026005",
-    "device": "LB-01",
-    "alarm": "Fiber Cut Detected",
+    "device": "SW-AGG-02",
+    "alarm": "Core Router Failure",
     "severity": "Critical",
-    "timestamp": "2026-06-08T03:20:24Z",
-    "status": "Acknowledged",
+    "timestamp": "2026-06-10T12:09:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 57,
-      "memory": 65,
-      "packet_loss": 2.19,
-      "latency_ms": 167,
-      "bandwidth_util": 63
+      "cpu": 77,
+      "memory": 75,
+      "packet_loss": 15.52,
+      "latency_ms": 447,
+      "bandwidth_util": 25
     }
   },
   {
     "alarm_id": "ALM-2026006",
-    "device": "RTR-EDGE-01",
-    "alarm": "Packet Loss > 5%",
-    "severity": "Major",
-    "timestamp": "2026-06-11T04:39:24Z",
+    "device": "RTR-CORE-02",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-16T11:56:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 27,
-      "memory": 93,
-      "packet_loss": 11.98,
-      "latency_ms": 435,
-      "bandwidth_util": 65
+      "cpu": 46,
+      "memory": 90,
+      "packet_loss": 3.05,
+      "latency_ms": 301,
+      "bandwidth_util": 74
     }
   },
   {
     "alarm_id": "ALM-2026007",
     "device": "FIREWALL-01",
-    "alarm": "NTP Sync Failed",
+    "alarm": "Interface CRC Errors",
     "severity": "Minor",
-    "timestamp": "2026-06-08T01:22:24Z",
+    "timestamp": "2026-06-11T13:32:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 26,
-      "memory": 93,
-      "packet_loss": 16.18,
-      "latency_ms": 369,
-      "bandwidth_util": 71
+      "cpu": 88,
+      "memory": 87,
+      "packet_loss": 2.16,
+      "latency_ms": 66,
+      "bandwidth_util": 54
     }
   },
   {
     "alarm_id": "ALM-2026008",
-    "device": "CE-RTR-01",
-    "alarm": "Core Router Failure",
+    "device": "RTR-EDGE-01",
+    "alarm": "Route Table Overflow",
     "severity": "Critical",
-    "timestamp": "2026-06-13T12:28:24Z",
-    "status": "Acknowledged",
+    "timestamp": "2026-06-09T05:59:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 91,
-      "memory": 87,
-      "packet_loss": 19.32,
-      "latency_ms": 164,
-      "bandwidth_util": 35
+      "cpu": 98,
+      "memory": 79,
+      "packet_loss": 14.35,
+      "latency_ms": 337,
+      "bandwidth_util": 86
     }
   },
   {
     "alarm_id": "ALM-2026009",
-    "device": "RTR-CORE-01",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-14T10:26:24Z",
-    "status": "Open",
+    "device": "RTR-CORE-02",
+    "alarm": "High CPU Utilization",
+    "severity": "Major",
+    "timestamp": "2026-06-15T02:33:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 16,
-      "memory": 52,
-      "packet_loss": 0.05,
-      "latency_ms": 449,
-      "bandwidth_util": 89
+      "cpu": 25,
+      "memory": 47,
+      "packet_loss": 19.44,
+      "latency_ms": 265,
+      "bandwidth_util": 54
     }
   },
   {
     "alarm_id": "ALM-2026010",
-    "device": "RTR-CORE-01",
+    "device": "RTR-CORE-02",
     "alarm": "Packet Loss > 5%",
     "severity": "Major",
-    "timestamp": "2026-06-14T21:38:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-11T10:14:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 90,
-      "memory": 72,
-      "packet_loss": 10.17,
-      "latency_ms": 477,
-      "bandwidth_util": 97
+      "cpu": 93,
+      "memory": 55,
+      "packet_loss": 16.04,
+      "latency_ms": 318,
+      "bandwidth_util": 74
     }
   },
   {
     "alarm_id": "ALM-2026011",
-    "device": "RTR-EDGE-01",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-15T11:04:24Z",
+    "device": "RTR-EDGE-02",
+    "alarm": "Spanning Tree Topology",
+    "severity": "Major",
+    "timestamp": "2026-06-14T09:05:26Z",
     "status": "Resolved",
     "kpi": {
-      "cpu": 63,
-      "memory": 83,
-      "packet_loss": 11.83,
-      "latency_ms": 153,
-      "bandwidth_util": 33
+      "cpu": 87,
+      "memory": 80,
+      "packet_loss": 5.82,
+      "latency_ms": 371,
+      "bandwidth_util": 82
     }
   },
   {
     "alarm_id": "ALM-2026012",
-    "device": "SW-AGG-02",
-    "alarm": "High CPU Utilization",
+    "device": "CE-RTR-01",
+    "alarm": "MPLS Label Stack Error",
     "severity": "Major",
-    "timestamp": "2026-06-07T15:49:24Z",
+    "timestamp": "2026-06-09T04:39:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 48,
-      "memory": 90,
-      "packet_loss": 0.72,
-      "latency_ms": 481,
-      "bandwidth_util": 5
+      "cpu": 85,
+      "memory": 45,
+      "packet_loss": 14.3,
+      "latency_ms": 187,
+      "bandwidth_util": 60
     }
   },
   {
     "alarm_id": "ALM-2026013",
-    "device": "FIREWALL-01",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-09T16:47:24Z",
-    "status": "Acknowledged",
+    "device": "SW-AGG-02",
+    "alarm": "Memory Leak Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-08T23:31:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 50,
-      "memory": 29,
-      "packet_loss": 9.64,
-      "latency_ms": 417,
-      "bandwidth_util": 42
+      "cpu": 41,
+      "memory": 83,
+      "packet_loss": 3.09,
+      "latency_ms": 135,
+      "bandwidth_util": 5
     }
   },
   {
     "alarm_id": "ALM-2026014",
-    "device": "PE-RTR-02",
-    "alarm": "DHCP Pool Exhausted",
-    "severity": "Minor",
-    "timestamp": "2026-06-09T16:45:24Z",
-    "status": "Acknowledged",
+    "device": "PE-RTR-01",
+    "alarm": "Spanning Tree Topology",
+    "severity": "Major",
+    "timestamp": "2026-06-15T20:14:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 64,
-      "memory": 44,
-      "packet_loss": 16.4,
-      "latency_ms": 79,
-      "bandwidth_util": 18
+      "cpu": 35,
+      "memory": 71,
+      "packet_loss": 3.14,
+      "latency_ms": 52,
+      "bandwidth_util": 96
     }
   },
   {
     "alarm_id": "ALM-2026015",
-    "device": "CE-RTR-01",
-    "alarm": "Memory Leak Detected",
+    "device": "RTR-CORE-02",
+    "alarm": "Route Table Overflow",
     "severity": "Critical",
-    "timestamp": "2026-06-15T02:57:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-12T02:50:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 58,
-      "memory": 60,
-      "packet_loss": 11.0,
-      "latency_ms": 372,
-      "bandwidth_util": 9
+      "cpu": 80,
+      "memory": 50,
+      "packet_loss": 12.49,
+      "latency_ms": 385,
+      "bandwidth_util": 56
     }
   },
   {
     "alarm_id": "ALM-2026016",
-    "device": "PE-RTR-01",
-    "alarm": "Interface Flapping",
+    "device": "SW-AGG-01",
+    "alarm": "MPLS Label Stack Error",
     "severity": "Major",
-    "timestamp": "2026-06-08T18:03:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-15T15:46:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 57,
-      "memory": 39,
-      "packet_loss": 15.43,
-      "latency_ms": 41,
-      "bandwidth_util": 79
+      "cpu": 29,
+      "memory": 97,
+      "packet_loss": 7.68,
+      "latency_ms": 216,
+      "bandwidth_util": 11
     }
   },
   {
     "alarm_id": "ALM-2026017",
-    "device": "RTR-EDGE-01",
-    "alarm": "Spanning Tree Topology",
-    "severity": "Major",
-    "timestamp": "2026-06-07T18:31:24Z",
-    "status": "Acknowledged",
+    "device": "PE-RTR-01",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-13T21:07:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 89,
-      "memory": 73,
-      "packet_loss": 9.8,
-      "latency_ms": 82,
-      "bandwidth_util": 84
+      "cpu": 87,
+      "memory": 58,
+      "packet_loss": 1.06,
+      "latency_ms": 77,
+      "bandwidth_util": 8
     }
   },
   {
     "alarm_id": "ALM-2026018",
-    "device": "RTR-EDGE-02",
-    "alarm": "High CPU Utilization",
-    "severity": "Major",
-    "timestamp": "2026-06-15T01:27:24Z",
+    "device": "CE-RTR-01",
+    "alarm": "Memory Leak Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-11T15:51:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 52,
-      "memory": 46,
-      "packet_loss": 9.42,
-      "latency_ms": 80,
-      "bandwidth_util": 71
+      "cpu": 37,
+      "memory": 87,
+      "packet_loss": 19.18,
+      "latency_ms": 168,
+      "bandwidth_util": 94
     }
   },
   {
     "alarm_id": "ALM-2026019",
-    "device": "RTR-EDGE-01",
-    "alarm": "MPLS Label Stack Error",
-    "severity": "Major",
-    "timestamp": "2026-06-12T10:53:24Z",
-    "status": "Acknowledged",
+    "device": "LB-01",
+    "alarm": "NTP Sync Failed",
+    "severity": "Minor",
+    "timestamp": "2026-06-16T16:22:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 61,
-      "memory": 54,
-      "packet_loss": 12.97,
-      "latency_ms": 281,
-      "bandwidth_util": 33
+      "cpu": 49,
+      "memory": 49,
+      "packet_loss": 7.69,
+      "latency_ms": 486,
+      "bandwidth_util": 71
     }
   },
   {
     "alarm_id": "ALM-2026020",
-    "device": "RTR-EDGE-01",
-    "alarm": "DHCP Pool Exhausted",
-    "severity": "Minor",
-    "timestamp": "2026-06-08T15:40:24Z",
-    "status": "Acknowledged",
+    "device": "LB-01",
+    "alarm": "Packet Loss > 5%",
+    "severity": "Major",
+    "timestamp": "2026-06-14T13:22:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 30,
-      "memory": 62,
-      "packet_loss": 10.66,
-      "latency_ms": 354,
-      "bandwidth_util": 64
+      "cpu": 36,
+      "memory": 72,
+      "packet_loss": 9.26,
+      "latency_ms": 335,
+      "bandwidth_util": 76
     }
   },
   {
     "alarm_id": "ALM-2026021",
-    "device": "CE-RTR-01",
-    "alarm": "Link Down",
-    "severity": "Critical",
-    "timestamp": "2026-06-09T16:30:24Z",
+    "device": "FIREWALL-02",
+    "alarm": "Spanning Tree Topology",
+    "severity": "Major",
+    "timestamp": "2026-06-14T16:54:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 84,
-      "memory": 47,
-      "packet_loss": 3.46,
-      "latency_ms": 300,
-      "bandwidth_util": 91
+      "cpu": 61,
+      "memory": 26,
+      "packet_loss": 5.61,
+      "latency_ms": 114,
+      "bandwidth_util": 90
     }
   },
   {
     "alarm_id": "ALM-2026022",
-    "device": "FIREWALL-02",
-    "alarm": "Interface Flapping",
+    "device": "LB-01",
+    "alarm": "Spanning Tree Topology",
     "severity": "Major",
-    "timestamp": "2026-06-10T08:58:24Z",
+    "timestamp": "2026-06-14T08:48:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 74,
-      "memory": 83,
-      "packet_loss": 11.28,
-      "latency_ms": 433,
-      "bandwidth_util": 57
+      "cpu": 40,
+      "memory": 93,
+      "packet_loss": 13.64,
+      "latency_ms": 423,
+      "bandwidth_util": 59
     }
   },
   {
     "alarm_id": "ALM-2026023",
-    "device": "CE-RTR-01",
-    "alarm": "MPLS Label Stack Error",
-    "severity": "Major",
-    "timestamp": "2026-06-09T04:03:24Z",
-    "status": "Acknowledged",
+    "device": "PE-RTR-02",
+    "alarm": "Link Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-15T04:48:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 16,
-      "memory": 98,
-      "packet_loss": 16.97,
-      "latency_ms": 287,
-      "bandwidth_util": 47
+      "cpu": 72,
+      "memory": 87,
+      "packet_loss": 6.39,
+      "latency_ms": 272,
+      "bandwidth_util": 53
     }
   },
   {
     "alarm_id": "ALM-2026024",
     "device": "RTR-EDGE-02",
-    "alarm": "DHCP Pool Exhausted",
-    "severity": "Minor",
-    "timestamp": "2026-06-10T21:53:24Z",
-    "status": "Acknowledged",
+    "alarm": "Memory Leak Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-11T13:49:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 34,
-      "memory": 24,
-      "packet_loss": 6.47,
-      "latency_ms": 294,
-      "bandwidth_util": 76
+      "cpu": 56,
+      "memory": 38,
+      "packet_loss": 19.64,
+      "latency_ms": 460,
+      "bandwidth_util": 8
     }
   },
   {
     "alarm_id": "ALM-2026025",
     "device": "SW-AGG-02",
-    "alarm": "Spanning Tree Topology",
-    "severity": "Major",
-    "timestamp": "2026-06-15T08:31:24Z",
+    "alarm": "OSPF Adjacency Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T07:22:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 42,
-      "memory": 53,
-      "packet_loss": 0.47,
-      "latency_ms": 152,
-      "bandwidth_util": 31
+      "cpu": 30,
+      "memory": 70,
+      "packet_loss": 2.65,
+      "latency_ms": 421,
+      "bandwidth_util": 13
     }
   },
   {
     "alarm_id": "ALM-2026026",
-    "device": "RTR-EDGE-02",
-    "alarm": "Packet Loss > 5%",
-    "severity": "Major",
-    "timestamp": "2026-06-11T10:19:24Z",
+    "device": "SW-AGG-01",
+    "alarm": "BGP Neighbor Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T00:47:26Z",
     "status": "Resolved",
     "kpi": {
-      "cpu": 26,
-      "memory": 33,
-      "packet_loss": 12.14,
-      "latency_ms": 149,
-      "bandwidth_util": 11
+      "cpu": 36,
+      "memory": 67,
+      "packet_loss": 5.65,
+      "latency_ms": 295,
+      "bandwidth_util": 79
     }
   },
   {
     "alarm_id": "ALM-2026027",
-    "device": "LB-01",
-    "alarm": "OSPF Adjacency Failure",
+    "device": "RTR-CORE-01",
+    "alarm": "Core Router Failure",
     "severity": "Critical",
-    "timestamp": "2026-06-08T11:53:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-09T10:51:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 69,
-      "memory": 42,
-      "packet_loss": 0.77,
-      "latency_ms": 176,
-      "bandwidth_util": 64
+      "cpu": 39,
+      "memory": 38,
+      "packet_loss": 10.14,
+      "latency_ms": 349,
+      "bandwidth_util": 87
     }
   },
   {
     "alarm_id": "ALM-2026028",
-    "device": "FIREWALL-02",
-    "alarm": "Packet Loss > 5%",
-    "severity": "Major",
-    "timestamp": "2026-06-12T00:28:24Z",
-    "status": "Resolved",
+    "device": "RTR-CORE-02",
+    "alarm": "Interface CRC Errors",
+    "severity": "Minor",
+    "timestamp": "2026-06-15T11:34:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 99,
-      "memory": 74,
-      "packet_loss": 16.89,
-      "latency_ms": 118,
-      "bandwidth_util": 63
+      "cpu": 73,
+      "memory": 43,
+      "packet_loss": 0.95,
+      "latency_ms": 144,
+      "bandwidth_util": 30
     }
   },
   {
     "alarm_id": "ALM-2026029",
-    "device": "RTR-CORE-02",
+    "device": "SW-AGG-02",
     "alarm": "Memory Leak Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-13T09:19:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-10T23:46:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 48,
-      "memory": 78,
-      "packet_loss": 9.93,
-      "latency_ms": 26,
-      "bandwidth_util": 55
+      "cpu": 31,
+      "memory": 84,
+      "packet_loss": 15.13,
+      "latency_ms": 86,
+      "bandwidth_util": 27
     }
   },
   {
     "alarm_id": "ALM-2026030",
-    "device": "PE-RTR-01",
-    "alarm": "Link Down",
+    "device": "PE-RTR-02",
+    "alarm": "BGP Neighbor Down",
     "severity": "Critical",
-    "timestamp": "2026-06-08T05:40:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-09T12:50:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 96,
-      "memory": 39,
-      "packet_loss": 16.71,
-      "latency_ms": 282,
-      "bandwidth_util": 50
+      "cpu": 90,
+      "memory": 82,
+      "packet_loss": 2.65,
+      "latency_ms": 464,
+      "bandwidth_util": 89
     }
   },
   {
     "alarm_id": "ALM-2026031",
-    "device": "PE-RTR-01",
-    "alarm": "Fiber Cut Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-08T20:41:24Z",
-    "status": "Open",
+    "device": "SW-AGG-02",
+    "alarm": "Packet Loss > 5%",
+    "severity": "Major",
+    "timestamp": "2026-06-13T19:02:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 36,
-      "memory": 56,
-      "packet_loss": 1.0,
-      "latency_ms": 388,
-      "bandwidth_util": 95
+      "cpu": 82,
+      "memory": 24,
+      "packet_loss": 18.42,
+      "latency_ms": 464,
+      "bandwidth_util": 12
     }
   },
   {
     "alarm_id": "ALM-2026032",
-    "device": "CE-RTR-01",
-    "alarm": "DHCP Pool Exhausted",
-    "severity": "Minor",
-    "timestamp": "2026-06-10T06:04:24Z",
-    "status": "Acknowledged",
+    "device": "SW-AGG-01",
+    "alarm": "BGP Neighbor Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T02:25:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 96,
-      "memory": 55,
-      "packet_loss": 14.31,
-      "latency_ms": 352,
-      "bandwidth_util": 92
+      "cpu": 77,
+      "memory": 24,
+      "packet_loss": 10.64,
+      "latency_ms": 343,
+      "bandwidth_util": 84
     }
   },
   {
     "alarm_id": "ALM-2026033",
-    "device": "LB-01",
-    "alarm": "Link Down",
+    "device": "RTR-CORE-01",
+    "alarm": "Fiber Cut Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-15T02:46:24Z",
-    "status": "Acknowledged",
+    "timestamp": "2026-06-12T00:39:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 67,
-      "memory": 48,
-      "packet_loss": 0.94,
-      "latency_ms": 277,
-      "bandwidth_util": 55
+      "cpu": 29,
+      "memory": 60,
+      "packet_loss": 15.43,
+      "latency_ms": 494,
+      "bandwidth_util": 77
     }
   },
   {
     "alarm_id": "ALM-2026034",
-    "device": "SW-AGG-01",
-    "alarm": "Packet Loss > 5%",
-    "severity": "Major",
-    "timestamp": "2026-06-11T00:24:24Z",
-    "status": "Resolved",
+    "device": "FIREWALL-02",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-12T05:47:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 56,
-      "memory": 20,
-      "packet_loss": 8.46,
-      "latency_ms": 64,
-      "bandwidth_util": 54
+      "cpu": 35,
+      "memory": 53,
+      "packet_loss": 4.85,
+      "latency_ms": 479,
+      "bandwidth_util": 60
     }
   },
   {
     "alarm_id": "ALM-2026035",
-    "device": "CE-RTR-01",
-    "alarm": "Packet Loss > 5%",
-    "severity": "Major",
-    "timestamp": "2026-06-10T10:51:24Z",
+    "device": "PE-RTR-02",
+    "alarm": "Link Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-12T06:25:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 44,
-      "memory": 89,
-      "packet_loss": 16.58,
-      "latency_ms": 116,
-      "bandwidth_util": 43
+      "cpu": 77,
+      "memory": 80,
+      "packet_loss": 16.72,
+      "latency_ms": 1,
+      "bandwidth_util": 54
     }
   },
   {
     "alarm_id": "ALM-2026036",
-    "device": "RTR-CORE-02",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-13T02:35:24Z",
+    "device": "FIREWALL-01",
+    "alarm": "Fiber Cut Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T03:43:26Z",
     "status": "Resolved",
     "kpi": {
-      "cpu": 19,
-      "memory": 88,
-      "packet_loss": 16.54,
-      "latency_ms": 56,
-      "bandwidth_util": 85
+      "cpu": 11,
+      "memory": 40,
+      "packet_loss": 16.34,
+      "latency_ms": 211,
+      "bandwidth_util": 30
     }
   },
   {
     "alarm_id": "ALM-2026037",
-    "device": "RTR-CORE-02",
-    "alarm": "Memory Leak Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-09T02:51:24Z",
-    "status": "Open",
+    "device": "SW-AGG-02",
+    "alarm": "High CPU Utilization",
+    "severity": "Major",
+    "timestamp": "2026-06-14T07:16:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 51,
-      "memory": 37,
-      "packet_loss": 9.61,
-      "latency_ms": 378,
-      "bandwidth_util": 33
+      "cpu": 57,
+      "memory": 39,
+      "packet_loss": 10.58,
+      "latency_ms": 271,
+      "bandwidth_util": 51
     }
   },
   {
     "alarm_id": "ALM-2026038",
-    "device": "RTR-CORE-02",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-15T09:43:24Z",
-    "status": "Acknowledged",
+    "device": "FIREWALL-01",
+    "alarm": "Link Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-15T22:06:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 70,
-      "memory": 48,
-      "packet_loss": 12.34,
-      "latency_ms": 282,
-      "bandwidth_util": 25
+      "cpu": 91,
+      "memory": 76,
+      "packet_loss": 4.5,
+      "latency_ms": 410,
+      "bandwidth_util": 40
     }
   },
   {
     "alarm_id": "ALM-2026039",
     "device": "PE-RTR-01",
-    "alarm": "Core Router Failure",
-    "severity": "Critical",
-    "timestamp": "2026-06-11T00:38:24Z",
-    "status": "Open",
+    "alarm": "Interface Flapping",
+    "severity": "Major",
+    "timestamp": "2026-06-15T09:47:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 29,
-      "memory": 98,
-      "packet_loss": 16.25,
-      "latency_ms": 309,
-      "bandwidth_util": 10
+      "cpu": 77,
+      "memory": 70,
+      "packet_loss": 16.64,
+      "latency_ms": 349,
+      "bandwidth_util": 69
     }
   },
   {
     "alarm_id": "ALM-2026040",
-    "device": "PE-RTR-02",
-    "alarm": "Core Router Failure",
-    "severity": "Critical",
-    "timestamp": "2026-06-13T04:32:24Z",
+    "device": "RTR-EDGE-01",
+    "alarm": "Interface CRC Errors",
+    "severity": "Minor",
+    "timestamp": "2026-06-08T17:54:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 44,
-      "memory": 43,
-      "packet_loss": 8.96,
-      "latency_ms": 329,
-      "bandwidth_util": 56
+      "cpu": 58,
+      "memory": 60,
+      "packet_loss": 16.9,
+      "latency_ms": 253,
+      "bandwidth_util": 39
     }
   },
   {
     "alarm_id": "ALM-2026041",
-    "device": "SW-AGG-01",
-    "alarm": "DHCP Pool Exhausted",
-    "severity": "Minor",
-    "timestamp": "2026-06-12T16:10:24Z",
-    "status": "Open",
+    "device": "FIREWALL-01",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-13T19:47:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 94,
-      "memory": 34,
-      "packet_loss": 10.51,
-      "latency_ms": 308,
-      "bandwidth_util": 33
+      "cpu": 92,
+      "memory": 54,
+      "packet_loss": 18.36,
+      "latency_ms": 143,
+      "bandwidth_util": 5
     }
   },
   {
     "alarm_id": "ALM-2026042",
-    "device": "RTR-CORE-01",
-    "alarm": "DHCP Pool Exhausted",
-    "severity": "Minor",
-    "timestamp": "2026-06-08T20:51:24Z",
-    "status": "Acknowledged",
+    "device": "CE-RTR-01",
+    "alarm": "MPLS Label Stack Error",
+    "severity": "Major",
+    "timestamp": "2026-06-12T10:34:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 51,
-      "memory": 98,
-      "packet_loss": 14.41,
-      "latency_ms": 21,
-      "bandwidth_util": 83
+      "cpu": 47,
+      "memory": 96,
+      "packet_loss": 8.68,
+      "latency_ms": 368,
+      "bandwidth_util": 49
     }
   },
   {
     "alarm_id": "ALM-2026043",
-    "device": "RTR-CORE-01",
-    "alarm": "BGP Neighbor Down",
+    "device": "FIREWALL-02",
+    "alarm": "Memory Leak Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-11T04:05:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-10T10:04:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 11,
-      "memory": 52,
-      "packet_loss": 0.52,
-      "latency_ms": 204,
-      "bandwidth_util": 31
+      "cpu": 34,
+      "memory": 81,
+      "packet_loss": 15.93,
+      "latency_ms": 174,
+      "bandwidth_util": 65
     }
   },
   {
     "alarm_id": "ALM-2026044",
-    "device": "PE-RTR-02",
-    "alarm": "MPLS Label Stack Error",
-    "severity": "Major",
-    "timestamp": "2026-06-10T20:50:24Z",
-    "status": "Acknowledged",
+    "device": "RTR-EDGE-02",
+    "alarm": "BGP Neighbor Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-13T23:32:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 37,
-      "memory": 78,
-      "packet_loss": 18.1,
-      "latency_ms": 117,
-      "bandwidth_util": 75
+      "cpu": 79,
+      "memory": 57,
+      "packet_loss": 15.96,
+      "latency_ms": 298,
+      "bandwidth_util": 71
     }
   },
   {
     "alarm_id": "ALM-2026045",
-    "device": "SW-AGG-01",
+    "device": "CE-RTR-01",
     "alarm": "Route Table Overflow",
     "severity": "Critical",
-    "timestamp": "2026-06-09T09:54:24Z",
-    "status": "Open",
-    "kpi": {
-      "cpu": 69,
-      "memory": 65,
-      "packet_loss": 19.06,
-      "latency_ms": 271,
-      "bandwidth_util": 77
-    }
-  },
-  {
-    "alarm_id": "ALM-2026046",
-    "device": "RTR-EDGE-02",
-    "alarm": "High CPU Utilization",
-    "severity": "Major",
-    "timestamp": "2026-06-11T07:13:24Z",
+    "timestamp": "2026-06-14T19:48:26Z",
     "status": "Resolved",
     "kpi": {
-      "cpu": 58,
-      "memory": 70,
-      "packet_loss": 6.77,
-      "latency_ms": 331,
+      "cpu": 50,
+      "memory": 60,
+      "packet_loss": 12.32,
+      "latency_ms": 197,
       "bandwidth_util": 58
     }
   },
   {
-    "alarm_id": "ALM-2026047",
-    "device": "FIREWALL-01",
-    "alarm": "Packet Loss > 5%",
-    "severity": "Major",
-    "timestamp": "2026-06-13T08:25:24Z",
+    "alarm_id": "ALM-2026046",
+    "device": "RTR-CORE-01",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-12T14:58:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 12,
-      "memory": 50,
-      "packet_loss": 13.23,
-      "latency_ms": 482,
-      "bandwidth_util": 39
+      "cpu": 30,
+      "memory": 27,
+      "packet_loss": 4.98,
+      "latency_ms": 141,
+      "bandwidth_util": 7
+    }
+  },
+  {
+    "alarm_id": "ALM-2026047",
+    "device": "SW-AGG-01",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-14T05:26:26Z",
+    "status": "Acknowledged",
+    "kpi": {
+      "cpu": 76,
+      "memory": 94,
+      "packet_loss": 3.03,
+      "latency_ms": 114,
+      "bandwidth_util": 16
     }
   },
   {
     "alarm_id": "ALM-2026048",
     "device": "SW-AGG-02",
-    "alarm": "Interface Flapping",
+    "alarm": "Spanning Tree Topology",
     "severity": "Major",
-    "timestamp": "2026-06-12T02:51:24Z",
-    "status": "Acknowledged",
+    "timestamp": "2026-06-16T08:47:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 86,
+      "cpu": 52,
       "memory": 29,
-      "packet_loss": 2.79,
-      "latency_ms": 4,
-      "bandwidth_util": 36
+      "packet_loss": 11.45,
+      "latency_ms": 498,
+      "bandwidth_util": 31
     }
   },
   {
     "alarm_id": "ALM-2026049",
-    "device": "CE-RTR-01",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-10T19:24:24Z",
-    "status": "Open",
+    "device": "SW-AGG-01",
+    "alarm": "Link Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-11T12:14:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 64,
-      "memory": 87,
-      "packet_loss": 14.76,
-      "latency_ms": 52,
-      "bandwidth_util": 74
+      "cpu": 56,
+      "memory": 34,
+      "packet_loss": 10.64,
+      "latency_ms": 15,
+      "bandwidth_util": 63
     }
   },
   {
     "alarm_id": "ALM-2026050",
-    "device": "LB-01",
-    "alarm": "Route Table Overflow",
-    "severity": "Critical",
-    "timestamp": "2026-06-09T20:15:24Z",
-    "status": "Acknowledged",
+    "device": "FIREWALL-01",
+    "alarm": "Packet Loss > 5%",
+    "severity": "Major",
+    "timestamp": "2026-06-09T07:49:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 83,
-      "memory": 30,
-      "packet_loss": 12.8,
-      "latency_ms": 272,
-      "bandwidth_util": 79
+      "cpu": 68,
+      "memory": 88,
+      "packet_loss": 6.5,
+      "latency_ms": 378,
+      "bandwidth_util": 77
     }
   },
   {
     "alarm_id": "ALM-2026051",
     "device": "RTR-CORE-02",
-    "alarm": "MPLS Label Stack Error",
+    "alarm": "Interface Flapping",
     "severity": "Major",
-    "timestamp": "2026-06-09T17:46:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-10T01:56:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 55,
-      "memory": 88,
-      "packet_loss": 0.78,
-      "latency_ms": 212,
-      "bandwidth_util": 40
+      "cpu": 56,
+      "memory": 39,
+      "packet_loss": 2.89,
+      "latency_ms": 64,
+      "bandwidth_util": 42
     }
   },
   {
     "alarm_id": "ALM-2026052",
-    "device": "RTR-CORE-01",
-    "alarm": "Memory Leak Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-10T21:36:24Z",
+    "device": "RTR-EDGE-02",
+    "alarm": "Interface CRC Errors",
+    "severity": "Minor",
+    "timestamp": "2026-06-13T11:18:26Z",
     "status": "Resolved",
     "kpi": {
-      "cpu": 49,
-      "memory": 94,
-      "packet_loss": 13.18,
-      "latency_ms": 41,
-      "bandwidth_util": 59
+      "cpu": 68,
+      "memory": 78,
+      "packet_loss": 1.91,
+      "latency_ms": 231,
+      "bandwidth_util": 6
     }
   },
   {
     "alarm_id": "ALM-2026053",
-    "device": "RTR-CORE-01",
-    "alarm": "NTP Sync Failed",
-    "severity": "Minor",
-    "timestamp": "2026-06-08T00:23:24Z",
+    "device": "FIREWALL-01",
+    "alarm": "Fiber Cut Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-16T11:34:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 87,
-      "memory": 97,
-      "packet_loss": 8.35,
-      "latency_ms": 284,
-      "bandwidth_util": 90
+      "cpu": 73,
+      "memory": 47,
+      "packet_loss": 12.74,
+      "latency_ms": 332,
+      "bandwidth_util": 54
     }
   },
   {
     "alarm_id": "ALM-2026054",
-    "device": "FIREWALL-02",
-    "alarm": "Interface Flapping",
-    "severity": "Major",
-    "timestamp": "2026-06-09T06:31:24Z",
-    "status": "Open",
+    "device": "FIREWALL-01",
+    "alarm": "BGP Neighbor Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-12T08:51:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 28,
-      "memory": 37,
-      "packet_loss": 11.18,
-      "latency_ms": 364,
-      "bandwidth_util": 26
+      "cpu": 66,
+      "memory": 98,
+      "packet_loss": 7.87,
+      "latency_ms": 18,
+      "bandwidth_util": 68
     }
   },
   {
     "alarm_id": "ALM-2026055",
-    "device": "FIREWALL-02",
-    "alarm": "Route Table Overflow",
+    "device": "RTR-CORE-01",
+    "alarm": "Fiber Cut Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-14T23:41:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-14T18:24:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 61,
-      "memory": 75,
-      "packet_loss": 17.14,
-      "latency_ms": 51,
-      "bandwidth_util": 65
+      "cpu": 10,
+      "memory": 79,
+      "packet_loss": 2.46,
+      "latency_ms": 326,
+      "bandwidth_util": 77
     }
   },
   {
     "alarm_id": "ALM-2026056",
-    "device": "RTR-CORE-02",
-    "alarm": "NTP Sync Failed",
-    "severity": "Minor",
-    "timestamp": "2026-06-09T02:28:24Z",
-    "status": "Resolved",
+    "device": "RTR-CORE-01",
+    "alarm": "OSPF Adjacency Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T13:09:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 89,
-      "memory": 88,
-      "packet_loss": 4.43,
-      "latency_ms": 379,
-      "bandwidth_util": 56
+      "cpu": 92,
+      "memory": 83,
+      "packet_loss": 4.16,
+      "latency_ms": 5,
+      "bandwidth_util": 81
     }
   },
   {
     "alarm_id": "ALM-2026057",
-    "device": "SW-AGG-01",
-    "alarm": "MPLS Label Stack Error",
-    "severity": "Major",
-    "timestamp": "2026-06-13T17:49:24Z",
-    "status": "Resolved",
+    "device": "SW-AGG-02",
+    "alarm": "BGP Neighbor Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T05:43:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 10,
-      "memory": 26,
-      "packet_loss": 8.52,
-      "latency_ms": 234,
-      "bandwidth_util": 7
+      "cpu": 74,
+      "memory": 86,
+      "packet_loss": 15.95,
+      "latency_ms": 52,
+      "bandwidth_util": 10
     }
   },
   {
@@ -874,629 +890,629 @@
     "device": "FIREWALL-01",
     "alarm": "Route Table Overflow",
     "severity": "Critical",
-    "timestamp": "2026-06-10T22:41:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-15T16:20:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 29,
-      "memory": 73,
-      "packet_loss": 2.63,
-      "latency_ms": 74,
-      "bandwidth_util": 76
+      "cpu": 16,
+      "memory": 95,
+      "packet_loss": 13.52,
+      "latency_ms": 331,
+      "bandwidth_util": 15
     }
   },
   {
     "alarm_id": "ALM-2026059",
-    "device": "RTR-EDGE-02",
-    "alarm": "Route Table Overflow",
+    "device": "PE-RTR-01",
+    "alarm": "Memory Leak Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-14T20:24:24Z",
+    "timestamp": "2026-06-10T06:41:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 73,
-      "memory": 60,
-      "packet_loss": 18.31,
-      "latency_ms": 367,
-      "bandwidth_util": 80
+      "cpu": 21,
+      "memory": 65,
+      "packet_loss": 8.39,
+      "latency_ms": 373,
+      "bandwidth_util": 14
     }
   },
   {
     "alarm_id": "ALM-2026060",
-    "device": "SW-AGG-01",
-    "alarm": "Interface CRC Errors",
+    "device": "FIREWALL-02",
+    "alarm": "NTP Sync Failed",
     "severity": "Minor",
-    "timestamp": "2026-06-09T23:06:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-12T10:35:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 35,
-      "memory": 80,
-      "packet_loss": 15.91,
-      "latency_ms": 496,
+      "cpu": 59,
+      "memory": 78,
+      "packet_loss": 13.15,
+      "latency_ms": 87,
       "bandwidth_util": 32
     }
   },
   {
     "alarm_id": "ALM-2026061",
-    "device": "SW-AGG-02",
-    "alarm": "Interface Flapping",
+    "device": "LB-01",
+    "alarm": "High CPU Utilization",
     "severity": "Major",
-    "timestamp": "2026-06-13T16:44:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-09T22:42:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 92,
-      "memory": 59,
-      "packet_loss": 7.77,
-      "latency_ms": 99,
-      "bandwidth_util": 72
+      "cpu": 99,
+      "memory": 78,
+      "packet_loss": 0.59,
+      "latency_ms": 284,
+      "bandwidth_util": 74
     }
   },
   {
     "alarm_id": "ALM-2026062",
-    "device": "FIREWALL-02",
+    "device": "RTR-EDGE-02",
     "alarm": "Packet Loss > 5%",
     "severity": "Major",
-    "timestamp": "2026-06-14T23:36:24Z",
+    "timestamp": "2026-06-13T07:39:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 57,
-      "memory": 63,
-      "packet_loss": 14.48,
-      "latency_ms": 194,
-      "bandwidth_util": 15
+      "cpu": 41,
+      "memory": 73,
+      "packet_loss": 17.84,
+      "latency_ms": 182,
+      "bandwidth_util": 26
     }
   },
   {
     "alarm_id": "ALM-2026063",
-    "device": "SW-AGG-01",
-    "alarm": "High CPU Utilization",
+    "device": "PE-RTR-01",
+    "alarm": "MPLS Label Stack Error",
     "severity": "Major",
-    "timestamp": "2026-06-15T14:59:24Z",
-    "status": "Acknowledged",
+    "timestamp": "2026-06-10T09:48:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 57,
-      "memory": 81,
-      "packet_loss": 5.96,
-      "latency_ms": 194,
-      "bandwidth_util": 19
+      "cpu": 74,
+      "memory": 94,
+      "packet_loss": 2.42,
+      "latency_ms": 44,
+      "bandwidth_util": 93
     }
   },
   {
     "alarm_id": "ALM-2026064",
     "device": "RTR-CORE-01",
-    "alarm": "Memory Leak Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-13T23:53:24Z",
-    "status": "Acknowledged",
+    "alarm": "Interface Flapping",
+    "severity": "Major",
+    "timestamp": "2026-06-12T08:14:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 19,
-      "memory": 86,
-      "packet_loss": 11.95,
-      "latency_ms": 457,
-      "bandwidth_util": 91
+      "cpu": 82,
+      "memory": 93,
+      "packet_loss": 10.72,
+      "latency_ms": 321,
+      "bandwidth_util": 97
     }
   },
   {
     "alarm_id": "ALM-2026065",
-    "device": "RTR-CORE-02",
-    "alarm": "Link Down",
+    "device": "SW-AGG-02",
+    "alarm": "Fiber Cut Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-11T08:00:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-11T13:02:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 49,
-      "memory": 97,
-      "packet_loss": 5.99,
-      "latency_ms": 485,
-      "bandwidth_util": 76
+      "cpu": 95,
+      "memory": 79,
+      "packet_loss": 7.03,
+      "latency_ms": 85,
+      "bandwidth_util": 80
     }
   },
   {
     "alarm_id": "ALM-2026066",
     "device": "RTR-CORE-02",
-    "alarm": "DHCP Pool Exhausted",
+    "alarm": "NTP Sync Failed",
     "severity": "Minor",
-    "timestamp": "2026-06-09T03:57:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-08T22:24:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 86,
-      "memory": 90,
-      "packet_loss": 10.1,
-      "latency_ms": 407,
-      "bandwidth_util": 60
+      "cpu": 74,
+      "memory": 48,
+      "packet_loss": 18.56,
+      "latency_ms": 286,
+      "bandwidth_util": 47
     }
   },
   {
     "alarm_id": "ALM-2026067",
-    "device": "SW-AGG-01",
-    "alarm": "Interface Flapping",
-    "severity": "Major",
-    "timestamp": "2026-06-10T01:49:24Z",
-    "status": "Resolved",
-    "kpi": {
-      "cpu": 20,
-      "memory": 64,
-      "packet_loss": 19.78,
-      "latency_ms": 144,
-      "bandwidth_util": 46
-    }
-  },
-  {
-    "alarm_id": "ALM-2026068",
-    "device": "FIREWALL-01",
-    "alarm": "BGP Neighbor Down",
-    "severity": "Critical",
-    "timestamp": "2026-06-10T11:31:24Z",
-    "status": "Open",
-    "kpi": {
-      "cpu": 99,
-      "memory": 63,
-      "packet_loss": 5.2,
-      "latency_ms": 404,
-      "bandwidth_util": 50
-    }
-  },
-  {
-    "alarm_id": "ALM-2026069",
-    "device": "PE-RTR-02",
-    "alarm": "Fiber Cut Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-11T06:28:24Z",
-    "status": "Open",
-    "kpi": {
-      "cpu": 37,
-      "memory": 82,
-      "packet_loss": 14.9,
-      "latency_ms": 388,
-      "bandwidth_util": 62
-    }
-  },
-  {
-    "alarm_id": "ALM-2026070",
-    "device": "RTR-CORE-01",
+    "device": "FIREWALL-02",
     "alarm": "Packet Loss > 5%",
     "severity": "Major",
-    "timestamp": "2026-06-09T11:11:24Z",
-    "status": "Acknowledged",
-    "kpi": {
-      "cpu": 58,
-      "memory": 27,
-      "packet_loss": 12.7,
-      "latency_ms": 152,
-      "bandwidth_util": 42
-    }
-  },
-  {
-    "alarm_id": "ALM-2026071",
-    "device": "RTR-EDGE-01",
-    "alarm": "Core Router Failure",
-    "severity": "Critical",
-    "timestamp": "2026-06-07T17:29:24Z",
-    "status": "Acknowledged",
-    "kpi": {
-      "cpu": 11,
-      "memory": 85,
-      "packet_loss": 11.83,
-      "latency_ms": 467,
-      "bandwidth_util": 32
-    }
-  },
-  {
-    "alarm_id": "ALM-2026072",
-    "device": "RTR-EDGE-01",
-    "alarm": "Interface Flapping",
-    "severity": "Major",
-    "timestamp": "2026-06-10T01:45:24Z",
+    "timestamp": "2026-06-16T15:02:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 39,
-      "memory": 94,
-      "packet_loss": 19.2,
-      "latency_ms": 175,
-      "bandwidth_util": 31
-    }
-  },
-  {
-    "alarm_id": "ALM-2026073",
-    "device": "PE-RTR-02",
-    "alarm": "High CPU Utilization",
-    "severity": "Major",
-    "timestamp": "2026-06-14T20:36:24Z",
-    "status": "Open",
-    "kpi": {
-      "cpu": 16,
-      "memory": 86,
-      "packet_loss": 0.47,
-      "latency_ms": 428,
-      "bandwidth_util": 24
-    }
-  },
-  {
-    "alarm_id": "ALM-2026074",
-    "device": "FIREWALL-01",
-    "alarm": "NTP Sync Failed",
-    "severity": "Minor",
-    "timestamp": "2026-06-09T15:43:24Z",
-    "status": "Open",
-    "kpi": {
-      "cpu": 85,
-      "memory": 23,
-      "packet_loss": 15.89,
+      "cpu": 70,
+      "memory": 54,
+      "packet_loss": 7.63,
       "latency_ms": 338,
-      "bandwidth_util": 88
-    }
-  },
-  {
-    "alarm_id": "ALM-2026075",
-    "device": "RTR-EDGE-02",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-13T08:28:24Z",
-    "status": "Resolved",
-    "kpi": {
-      "cpu": 23,
-      "memory": 51,
-      "packet_loss": 13.5,
-      "latency_ms": 379,
-      "bandwidth_util": 66
-    }
-  },
-  {
-    "alarm_id": "ALM-2026076",
-    "device": "RTR-EDGE-01",
-    "alarm": "OSPF Adjacency Failure",
-    "severity": "Critical",
-    "timestamp": "2026-06-15T03:58:24Z",
-    "status": "Acknowledged",
-    "kpi": {
-      "cpu": 97,
-      "memory": 53,
-      "packet_loss": 13.95,
-      "latency_ms": 476,
-      "bandwidth_util": 41
-    }
-  },
-  {
-    "alarm_id": "ALM-2026077",
-    "device": "RTR-EDGE-02",
-    "alarm": "Interface Flapping",
-    "severity": "Major",
-    "timestamp": "2026-06-08T13:49:24Z",
-    "status": "Acknowledged",
-    "kpi": {
-      "cpu": 13,
-      "memory": 38,
-      "packet_loss": 13.87,
-      "latency_ms": 161,
-      "bandwidth_util": 60
-    }
-  },
-  {
-    "alarm_id": "ALM-2026078",
-    "device": "CE-RTR-01",
-    "alarm": "Memory Leak Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-12T16:55:24Z",
-    "status": "Acknowledged",
-    "kpi": {
-      "cpu": 15,
-      "memory": 75,
-      "packet_loss": 9.1,
-      "latency_ms": 207,
-      "bandwidth_util": 68
-    }
-  },
-  {
-    "alarm_id": "ALM-2026079",
-    "device": "PE-RTR-01",
-    "alarm": "High CPU Utilization",
-    "severity": "Major",
-    "timestamp": "2026-06-09T07:25:24Z",
-    "status": "Resolved",
-    "kpi": {
-      "cpu": 26,
-      "memory": 48,
-      "packet_loss": 17.92,
-      "latency_ms": 400,
-      "bandwidth_util": 78
-    }
-  },
-  {
-    "alarm_id": "ALM-2026080",
-    "device": "LB-01",
-    "alarm": "Interface Flapping",
-    "severity": "Major",
-    "timestamp": "2026-06-10T12:35:24Z",
-    "status": "Acknowledged",
-    "kpi": {
-      "cpu": 43,
-      "memory": 91,
-      "packet_loss": 19.46,
-      "latency_ms": 109,
       "bandwidth_util": 85
     }
   },
   {
-    "alarm_id": "ALM-2026081",
-    "device": "LB-01",
+    "alarm_id": "ALM-2026068",
+    "device": "RTR-EDGE-02",
+    "alarm": "Link Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-15T19:44:26Z",
+    "status": "Resolved",
+    "kpi": {
+      "cpu": 30,
+      "memory": 24,
+      "packet_loss": 16.47,
+      "latency_ms": 92,
+      "bandwidth_util": 79
+    }
+  },
+  {
+    "alarm_id": "ALM-2026069",
+    "device": "RTR-EDGE-01",
+    "alarm": "Interface CRC Errors",
+    "severity": "Minor",
+    "timestamp": "2026-06-11T08:52:26Z",
+    "status": "Acknowledged",
+    "kpi": {
+      "cpu": 52,
+      "memory": 22,
+      "packet_loss": 4.98,
+      "latency_ms": 48,
+      "bandwidth_util": 58
+    }
+  },
+  {
+    "alarm_id": "ALM-2026070",
+    "device": "PE-RTR-02",
+    "alarm": "Fiber Cut Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-15T17:30:26Z",
+    "status": "Open",
+    "kpi": {
+      "cpu": 22,
+      "memory": 92,
+      "packet_loss": 5.21,
+      "latency_ms": 274,
+      "bandwidth_util": 48
+    }
+  },
+  {
+    "alarm_id": "ALM-2026071",
+    "device": "FIREWALL-01",
+    "alarm": "BGP Neighbor Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T04:21:26Z",
+    "status": "Resolved",
+    "kpi": {
+      "cpu": 70,
+      "memory": 43,
+      "packet_loss": 9.62,
+      "latency_ms": 242,
+      "bandwidth_util": 8
+    }
+  },
+  {
+    "alarm_id": "ALM-2026072",
+    "device": "PE-RTR-02",
     "alarm": "High CPU Utilization",
     "severity": "Major",
-    "timestamp": "2026-06-15T10:50:24Z",
+    "timestamp": "2026-06-09T01:34:26Z",
+    "status": "Acknowledged",
+    "kpi": {
+      "cpu": 78,
+      "memory": 62,
+      "packet_loss": 3.86,
+      "latency_ms": 130,
+      "bandwidth_util": 40
+    }
+  },
+  {
+    "alarm_id": "ALM-2026073",
+    "device": "RTR-EDGE-01",
+    "alarm": "Interface Flapping",
+    "severity": "Major",
+    "timestamp": "2026-06-10T19:42:26Z",
+    "status": "Resolved",
+    "kpi": {
+      "cpu": 60,
+      "memory": 65,
+      "packet_loss": 18.2,
+      "latency_ms": 144,
+      "bandwidth_util": 47
+    }
+  },
+  {
+    "alarm_id": "ALM-2026074",
+    "device": "LB-01",
+    "alarm": "Memory Leak Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-12T20:20:26Z",
+    "status": "Resolved",
+    "kpi": {
+      "cpu": 76,
+      "memory": 25,
+      "packet_loss": 13.98,
+      "latency_ms": 121,
+      "bandwidth_util": 97
+    }
+  },
+  {
+    "alarm_id": "ALM-2026075",
+    "device": "PE-RTR-02",
+    "alarm": "OSPF Adjacency Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-12T17:49:26Z",
+    "status": "Resolved",
+    "kpi": {
+      "cpu": 93,
+      "memory": 76,
+      "packet_loss": 3.97,
+      "latency_ms": 312,
+      "bandwidth_util": 87
+    }
+  },
+  {
+    "alarm_id": "ALM-2026076",
+    "device": "SW-AGG-01",
+    "alarm": "Route Table Overflow",
+    "severity": "Critical",
+    "timestamp": "2026-06-14T03:07:26Z",
+    "status": "Acknowledged",
+    "kpi": {
+      "cpu": 40,
+      "memory": 86,
+      "packet_loss": 1.22,
+      "latency_ms": 295,
+      "bandwidth_util": 70
+    }
+  },
+  {
+    "alarm_id": "ALM-2026077",
+    "device": "LB-01",
+    "alarm": "Interface CRC Errors",
+    "severity": "Minor",
+    "timestamp": "2026-06-15T00:07:26Z",
+    "status": "Open",
+    "kpi": {
+      "cpu": 90,
+      "memory": 54,
+      "packet_loss": 16.32,
+      "latency_ms": 76,
+      "bandwidth_util": 73
+    }
+  },
+  {
+    "alarm_id": "ALM-2026078",
+    "device": "FIREWALL-01",
+    "alarm": "NTP Sync Failed",
+    "severity": "Minor",
+    "timestamp": "2026-06-10T03:17:26Z",
+    "status": "Resolved",
+    "kpi": {
+      "cpu": 44,
+      "memory": 26,
+      "packet_loss": 11.4,
+      "latency_ms": 107,
+      "bandwidth_util": 28
+    }
+  },
+  {
+    "alarm_id": "ALM-2026079",
+    "device": "RTR-EDGE-02",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-13T13:29:26Z",
+    "status": "Resolved",
+    "kpi": {
+      "cpu": 87,
+      "memory": 30,
+      "packet_loss": 5.55,
+      "latency_ms": 58,
+      "bandwidth_util": 93
+    }
+  },
+  {
+    "alarm_id": "ALM-2026080",
+    "device": "PE-RTR-02",
+    "alarm": "MPLS Label Stack Error",
+    "severity": "Major",
+    "timestamp": "2026-06-15T12:17:26Z",
     "status": "Resolved",
     "kpi": {
       "cpu": 27,
-      "memory": 66,
-      "packet_loss": 8.18,
-      "latency_ms": 129,
-      "bandwidth_util": 66
+      "memory": 65,
+      "packet_loss": 0.68,
+      "latency_ms": 240,
+      "bandwidth_util": 32
+    }
+  },
+  {
+    "alarm_id": "ALM-2026081",
+    "device": "PE-RTR-02",
+    "alarm": "Interface Flapping",
+    "severity": "Major",
+    "timestamp": "2026-06-09T21:56:26Z",
+    "status": "Acknowledged",
+    "kpi": {
+      "cpu": 95,
+      "memory": 85,
+      "packet_loss": 4.52,
+      "latency_ms": 426,
+      "bandwidth_util": 47
     }
   },
   {
     "alarm_id": "ALM-2026082",
-    "device": "LB-01",
-    "alarm": "Memory Leak Detected",
-    "severity": "Critical",
-    "timestamp": "2026-06-10T20:41:24Z",
-    "status": "Resolved",
+    "device": "FIREWALL-02",
+    "alarm": "DHCP Pool Exhausted",
+    "severity": "Minor",
+    "timestamp": "2026-06-16T03:49:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 14,
-      "memory": 23,
-      "packet_loss": 5.41,
-      "latency_ms": 273,
-      "bandwidth_util": 68
+      "cpu": 15,
+      "memory": 54,
+      "packet_loss": 6.76,
+      "latency_ms": 272,
+      "bandwidth_util": 83
     }
   },
   {
     "alarm_id": "ALM-2026083",
-    "device": "RTR-EDGE-02",
-    "alarm": "Spanning Tree Topology",
+    "device": "SW-AGG-02",
+    "alarm": "High CPU Utilization",
     "severity": "Major",
-    "timestamp": "2026-06-09T21:31:24Z",
-    "status": "Acknowledged",
+    "timestamp": "2026-06-10T05:10:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 81,
-      "memory": 62,
-      "packet_loss": 1.32,
-      "latency_ms": 228,
-      "bandwidth_util": 39
+      "cpu": 84,
+      "memory": 95,
+      "packet_loss": 9.55,
+      "latency_ms": 264,
+      "bandwidth_util": 45
     }
   },
   {
     "alarm_id": "ALM-2026084",
-    "device": "LB-01",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-14T10:17:24Z",
-    "status": "Open",
+    "device": "SW-AGG-02",
+    "alarm": "Core Router Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T20:52:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 33,
-      "memory": 82,
-      "packet_loss": 11.36,
-      "latency_ms": 13,
-      "bandwidth_util": 55
+      "cpu": 70,
+      "memory": 68,
+      "packet_loss": 5.44,
+      "latency_ms": 18,
+      "bandwidth_util": 82
     }
   },
   {
     "alarm_id": "ALM-2026085",
-    "device": "CE-RTR-01",
-    "alarm": "Route Table Overflow",
-    "severity": "Critical",
-    "timestamp": "2026-06-14T19:54:24Z",
-    "status": "Resolved",
+    "device": "PE-RTR-01",
+    "alarm": "Spanning Tree Topology",
+    "severity": "Major",
+    "timestamp": "2026-06-14T06:58:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 72,
-      "memory": 28,
-      "packet_loss": 5.13,
-      "latency_ms": 102,
-      "bandwidth_util": 25
+      "cpu": 64,
+      "memory": 75,
+      "packet_loss": 6.88,
+      "latency_ms": 281,
+      "bandwidth_util": 28
     }
   },
   {
     "alarm_id": "ALM-2026086",
     "device": "FIREWALL-01",
-    "alarm": "OSPF Adjacency Failure",
+    "alarm": "Route Table Overflow",
     "severity": "Critical",
-    "timestamp": "2026-06-11T13:37:24Z",
+    "timestamp": "2026-06-14T21:27:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 10,
-      "memory": 95,
-      "packet_loss": 13.21,
-      "latency_ms": 373,
-      "bandwidth_util": 62
+      "cpu": 56,
+      "memory": 56,
+      "packet_loss": 18.65,
+      "latency_ms": 86,
+      "bandwidth_util": 75
     }
   },
   {
     "alarm_id": "ALM-2026087",
-    "device": "FIREWALL-01",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-10T23:47:24Z",
-    "status": "Acknowledged",
+    "device": "RTR-EDGE-01",
+    "alarm": "High CPU Utilization",
+    "severity": "Major",
+    "timestamp": "2026-06-12T08:09:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 26,
-      "memory": 37,
-      "packet_loss": 5.38,
-      "latency_ms": 198,
-      "bandwidth_util": 52
+      "cpu": 89,
+      "memory": 24,
+      "packet_loss": 17.48,
+      "latency_ms": 183,
+      "bandwidth_util": 80
     }
   },
   {
     "alarm_id": "ALM-2026088",
-    "device": "CE-RTR-01",
+    "device": "RTR-EDGE-02",
     "alarm": "Link Down",
     "severity": "Critical",
-    "timestamp": "2026-06-09T07:23:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-16T07:15:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 49,
-      "memory": 32,
-      "packet_loss": 17.56,
-      "latency_ms": 119,
-      "bandwidth_util": 71
+      "cpu": 88,
+      "memory": 47,
+      "packet_loss": 4.81,
+      "latency_ms": 277,
+      "bandwidth_util": 30
     }
   },
   {
     "alarm_id": "ALM-2026089",
-    "device": "LB-01",
-    "alarm": "Interface Flapping",
-    "severity": "Major",
-    "timestamp": "2026-06-08T12:59:24Z",
+    "device": "RTR-EDGE-02",
+    "alarm": "OSPF Adjacency Failure",
+    "severity": "Critical",
+    "timestamp": "2026-06-09T14:54:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 26,
-      "memory": 53,
-      "packet_loss": 17.96,
-      "latency_ms": 497,
-      "bandwidth_util": 73
+      "cpu": 28,
+      "memory": 64,
+      "packet_loss": 5.31,
+      "latency_ms": 311,
+      "bandwidth_util": 96
     }
   },
   {
     "alarm_id": "ALM-2026090",
-    "device": "PE-RTR-01",
-    "alarm": "NTP Sync Failed",
+    "device": "RTR-EDGE-02",
+    "alarm": "DHCP Pool Exhausted",
     "severity": "Minor",
-    "timestamp": "2026-06-09T21:52:24Z",
-    "status": "Open",
+    "timestamp": "2026-06-16T11:41:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 68,
-      "memory": 28,
-      "packet_loss": 2.37,
-      "latency_ms": 434,
-      "bandwidth_util": 46
+      "cpu": 80,
+      "memory": 75,
+      "packet_loss": 8.26,
+      "latency_ms": 43,
+      "bandwidth_util": 31
     }
   },
   {
     "alarm_id": "ALM-2026091",
     "device": "SW-AGG-02",
-    "alarm": "OSPF Adjacency Failure",
+    "alarm": "Fiber Cut Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-11T17:57:24Z",
+    "timestamp": "2026-06-11T19:23:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 73,
-      "memory": 50,
-      "packet_loss": 1.2,
-      "latency_ms": 418,
-      "bandwidth_util": 83
+      "cpu": 57,
+      "memory": 30,
+      "packet_loss": 18.65,
+      "latency_ms": 158,
+      "bandwidth_util": 50
     }
   },
   {
     "alarm_id": "ALM-2026092",
-    "device": "FIREWALL-02",
-    "alarm": "Link Down",
+    "device": "RTR-EDGE-02",
+    "alarm": "Fiber Cut Detected",
     "severity": "Critical",
-    "timestamp": "2026-06-14T11:19:24Z",
-    "status": "Acknowledged",
+    "timestamp": "2026-06-13T03:40:26Z",
+    "status": "Resolved",
     "kpi": {
-      "cpu": 92,
-      "memory": 55,
-      "packet_loss": 14.21,
-      "latency_ms": 238,
-      "bandwidth_util": 13
+      "cpu": 25,
+      "memory": 58,
+      "packet_loss": 0.05,
+      "latency_ms": 400,
+      "bandwidth_util": 42
     }
   },
   {
     "alarm_id": "ALM-2026093",
-    "device": "CE-RTR-01",
-    "alarm": "Core Router Failure",
-    "severity": "Critical",
-    "timestamp": "2026-06-15T04:23:24Z",
+    "device": "RTR-EDGE-01",
+    "alarm": "NTP Sync Failed",
+    "severity": "Minor",
+    "timestamp": "2026-06-15T01:36:26Z",
     "status": "Acknowledged",
     "kpi": {
-      "cpu": 11,
-      "memory": 49,
-      "packet_loss": 16.72,
-      "latency_ms": 130,
-      "bandwidth_util": 60
+      "cpu": 37,
+      "memory": 44,
+      "packet_loss": 16.13,
+      "latency_ms": 211,
+      "bandwidth_util": 98
     }
   },
   {
     "alarm_id": "ALM-2026094",
-    "device": "RTR-EDGE-01",
-    "alarm": "Interface Flapping",
+    "device": "SW-AGG-01",
+    "alarm": "High CPU Utilization",
     "severity": "Major",
-    "timestamp": "2026-06-11T06:38:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-15T13:29:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 69,
-      "memory": 72,
-      "packet_loss": 11.32,
-      "latency_ms": 159,
-      "bandwidth_util": 83
+      "cpu": 14,
+      "memory": 71,
+      "packet_loss": 4.27,
+      "latency_ms": 496,
+      "bandwidth_util": 33
     }
   },
   {
     "alarm_id": "ALM-2026095",
-    "device": "SW-AGG-02",
+    "device": "CE-RTR-01",
     "alarm": "BGP Neighbor Down",
     "severity": "Critical",
-    "timestamp": "2026-06-11T13:06:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-09T06:12:26Z",
+    "status": "Acknowledged",
     "kpi": {
-      "cpu": 29,
-      "memory": 88,
-      "packet_loss": 4.63,
-      "latency_ms": 349,
-      "bandwidth_util": 46
+      "cpu": 59,
+      "memory": 40,
+      "packet_loss": 14.7,
+      "latency_ms": 203,
+      "bandwidth_util": 83
     }
   },
   {
     "alarm_id": "ALM-2026096",
-    "device": "SW-AGG-01",
-    "alarm": "BGP Neighbor Down",
+    "device": "CE-RTR-01",
+    "alarm": "Link Down",
     "severity": "Critical",
-    "timestamp": "2026-06-11T15:48:24Z",
-    "status": "Resolved",
+    "timestamp": "2026-06-12T21:36:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 16,
-      "memory": 91,
-      "packet_loss": 14.1,
-      "latency_ms": 204,
-      "bandwidth_util": 57
+      "cpu": 61,
+      "memory": 24,
+      "packet_loss": 0.41,
+      "latency_ms": 271,
+      "bandwidth_util": 7
     }
   },
   {
     "alarm_id": "ALM-2026097",
-    "device": "FIREWALL-01",
-    "alarm": "Interface CRC Errors",
-    "severity": "Minor",
-    "timestamp": "2026-06-12T15:06:24Z",
+    "device": "FIREWALL-02",
+    "alarm": "Memory Leak Detected",
+    "severity": "Critical",
+    "timestamp": "2026-06-11T12:02:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 86,
-      "memory": 98,
-      "packet_loss": 3.81,
-      "latency_ms": 9,
-      "bandwidth_util": 73
+      "cpu": 21,
+      "memory": 22,
+      "packet_loss": 9.54,
+      "latency_ms": 19,
+      "bandwidth_util": 88
     }
   },
   {
     "alarm_id": "ALM-2026098",
-    "device": "SW-AGG-01",
-    "alarm": "BGP Neighbor Down",
-    "severity": "Critical",
-    "timestamp": "2026-06-10T11:30:24Z",
-    "status": "Acknowledged",
+    "device": "SW-AGG-02",
+    "alarm": "Interface CRC Errors",
+    "severity": "Minor",
+    "timestamp": "2026-06-16T06:19:26Z",
+    "status": "Open",
     "kpi": {
-      "cpu": 71,
-      "memory": 28,
-      "packet_loss": 4.35,
-      "latency_ms": 223,
-      "bandwidth_util": 31
+      "cpu": 55,
+      "memory": 50,
+      "packet_loss": 6.26,
+      "latency_ms": 69,
+      "bandwidth_util": 64
     }
   },
   {
     "alarm_id": "ALM-2026099",
-    "device": "FIREWALL-02",
-    "alarm": "Spanning Tree Topology",
-    "severity": "Major",
-    "timestamp": "2026-06-08T08:40:24Z",
+    "device": "RTR-CORE-02",
+    "alarm": "Link Down",
+    "severity": "Critical",
+    "timestamp": "2026-06-15T16:29:26Z",
     "status": "Open",
     "kpi": {
-      "cpu": 51,
-      "memory": 88,
-      "packet_loss": 10.99,
-      "latency_ms": 300,
-      "bandwidth_util": 69
+      "cpu": 59,
+      "memory": 92,
+      "packet_loss": 10.15,
+      "latency_ms": 367,
+      "bandwidth_util": 33
     }
   }
 ]
