@@ -517,9 +517,10 @@ elif st.session_state.page == "rca":
                  f"<td>{badge(i.get('severity','Minor'))}</td>"
                  f"<td style='max-width:200px;font-size:.78rem'>{i.get('root_cause','—')[:80]}</td>"
                  f"<td style='max-width:200px;font-size:.78rem'>{i.get('resolution','—')[:80]}</td>"
-                 f"<td>{badge(i.get('status','Open'))}</td></tr>")
+                #  f"<td>{badge(i.get('status','Open'))}</td></tr>"
+                 )
     st.markdown(f"""<table class='noc-table'><thead><tr>
-      <th>Incident ID</th><th>Severity</th><th>Root Cause</th><th>Resolution</th><th>Status</th>
+      <th>Incident ID</th><th>Severity</th><th>Root Cause</th><th>Resolution</th>
     </tr></thead><tbody>{rows}</tbody></table>""", unsafe_allow_html=True)
 
 
@@ -539,7 +540,7 @@ elif st.session_state.page == "knowledge":
             results = data.get("results",[])
             st.success(f"Found {len(results)} relevant documents")
             for i,r in enumerate(results,1):
-                score_pct = int(r.get("score",0)*100)
+                score_pct = int(r.get("score",0)*0.1)
                 src_icon  = {"historical":"📜","sop":"📋","vendor_kb":"🏭","runbook":"📖"}.get(r["source"],"📄")
                 with st.expander(f"{src_icon} Result {i} — {r['source'].upper()} | Relevance: {score_pct}%",
                                  expanded=i==1):
@@ -638,7 +639,7 @@ elif st.session_state.page == "remediation":
 
         st.markdown("**Remediation Steps**")
         for s in steps:
-            auto_tag = '<span class="step-auto">AUTO</span>' if s.get("automated") else '<span class="step-manual">MANUAL</span>'
+            auto_tag = '<span class="step-auto">AUTO</span>' if s.get("automated") else 'MANUAL'
             cmd_block = f'<code style="background:#0A0E1A;padding:2px 8px;border-radius:3px;font-size:.78rem">{s["command"]}</code>' if s.get("command") else ""
             st.markdown(f"""<div class="step-item">
               <div class="step-num">{s.get('step_number','?')}</div>
